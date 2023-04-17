@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <nav class="navbar is-fixed-top secondary-color" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io">
       <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
@@ -66,11 +66,5 @@
 </script>
 
 <style scoped>
-nav{
-  background-color: #4c566a;
-}
-a{
-  color: black;
-}
 
 </style>
