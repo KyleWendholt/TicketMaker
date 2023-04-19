@@ -1,0 +1,32 @@
+{
+  "name": "ticketmaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm i -ws && npm run build -ws",
+    "dev": "nodemon --watch server server/index.js",
+    "start": "node server/index.js"
+  },
+  "workspaces": [
+    "client"
+  ],
+  "dependencies": {
+    "mongodb": "^4.12.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyleWendholt/TicketMaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KyleWendholt/TicketMaker/issues"
+  },
+  "homepage": "https://github.com/KyleWendholt/TicketMaker#readme"
+}
