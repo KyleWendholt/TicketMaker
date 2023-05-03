@@ -16,8 +16,15 @@ app.post("/login", (req,res,next)=>{
 })
 .post('/changePassword', (req,res,next)=>{
   users
-    .changePassword(req.body.token, req.body.newPassword)
-    .then((x) => res.status(200).send(x))
+    .changePassword(req.body.JWTtoken, req.body.oldPassword, req.body.newPassword)
+    .then((result) => {
+      if (result === true) {
+        res.status(200).send("Password changed successfully");
+      } else {
+        res.status(400).send(result);
+      }
+    }
+    )
     .catch(next);
 })
 

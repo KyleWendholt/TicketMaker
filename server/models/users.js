@@ -23,22 +23,26 @@ async function getUser(id) {
 }
 
 async function updateUser(id, user) {
+  console.log(id, user);
   const db = await collection();
-  await db.updateOne({_id: new ObjectId(id)}, {$set: user});
-  return user;
+  const result = await db.updateOne({_id: new ObjectId(id)}, {$set: user});
+  return result.modifiedCount === 1;
 }
 
-async function changePassword(token, newPassword) {
+async function changePassword(token, oldPassword, newPassword) {
   const db = await collection();
   const userid = jwt.verify(token, JWT_SECRET).id;
   const user = await db.findOne({_id: new ObjectId(userid)});
+  console.log(await bcrypt.compare(oldPassword, user.password));
   if (!user) {
-    return null;
+    return "User not found";
   }
-  return updateUser(token.id, {password: await bcrypt.hash(newPassword, 10)});
+  if (!(await bcrypt.compare(oldPassword, user.password))) {
+    return "Old password is incorrect";
+  }
+  user.password = await bcrypt.hash(newPassword, 10);
+  return await updateUser(userid,user);
 }
-
-
 
 async function deleteUser(id) {
   const db = await collection();
@@ -46,12 +50,11 @@ async function deleteUser(id) {
   return result.deletedCount === 1;
 }
 
-
 async function login(username, password) {
   const db = await collection();
   const user = await db.findOne({username: username});
   if (!user) {
-    return null;
+    return "Username or password is incorrect";
   }
   if (bcrypt.compare(password, user.password)) {
     const token = jwt.sign(
@@ -63,14 +66,17 @@ async function login(username, password) {
     );
     return token;
   }
-  return "Invalid password";
+  return "Username or password is incorrect";
 }
   
 async function addUser(user) {
   const db = await collection();
-  user.password = await bcrypt.hash(user.password, 10)
-  await db.insertOne(user);
-  return user;
+  user.password = await bcrypt.hash(user.password, 10);
+  if (await db.findOne({username: user.username})) {
+    return false;
+  }
+  const result = await db.insertOne(user);
+  return result.insertedCount === 1;
 }
 
 module.exports = {
