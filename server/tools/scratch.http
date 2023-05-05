@@ -23,7 +23,11 @@ POST  http://127.0.0.1:3003/api/v1/users/changePassword
 Content-Type: application/json
 
   {
-    "JWTtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDkzZTE5ODllZjM0MDUyMjc0OTNhZiIsInVzZXJuYW1lIjoidGVzdCIsImlhdCI6MTY4MzA3ODUwNn0.ThSvcpl1X6MTYwYk6sUtybHULmEyy-mH6SiaiAYvdHE",
+    "JWTtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2NDQ5M2UxOTg5ZWYzNDA1MjI3NDkzYWYiLCJ1c2VybmFtZSI6InRlc3QiLCJ0aW1lc3RhbXAiOiJUaHUgTWF5IDE4IDIwMjMgMjI6MzU6NTYgR01ULTA0MDAgKEVhc3Rlcm4gRGF5bGlnaHQgVGltZSkiLCJpYXQiOjE2ODMyNTQxNTZ9.H6_aaXhYM7I71Ebb95jpGvzfepqgFaKkVPMwVNV1I88",
     "oldPassword": "test",
     "newPassword": "test"
   }
+
+###
+
+POST  http://127.0.0.1:3003/api/v1/tickets/create

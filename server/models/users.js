@@ -31,7 +31,11 @@ async function updateUser(id, user) {
 
 async function changePassword(token, oldPassword, newPassword) {
   const db = await collection();
-  const userid = jwt.verify(token, JWT_SECRET).id;
+  data = verifyToken(token);
+  if (!data) {
+    return "Invalid token";
+  }
+  const userid = data.userid;
   const user = await db.findOne({_id: new ObjectId(userid)});
   console.log(await bcrypt.compare(oldPassword, user.password));
   if (!user) {
@@ -57,10 +61,14 @@ async function login(username, password) {
     return "Username or password is incorrect";
   }
   if (bcrypt.compare(password, user.password)) {
+    const numWeeks = 2;
+    const date = new Date();
+    date.setDate(date.getDate() + numWeeks * 7);
     const token = jwt.sign(
       {
-        id: user._id, 
-        username: user.username
+        userid: user._id, 
+        username: user.username,
+        timestamp: date.toString()
       }, 
       JWT_SECRET
     );
@@ -79,6 +87,18 @@ async function addUser(user) {
   return result.insertedCount === 1;
 }
 
+function verifyToken(JWTtoken) {
+  try {
+    data = jwt.verify(JWTtoken, JWT_SECRET);
+    if (data.timestamp < new Date().toString()) {
+      throw new Error("Token expired");
+    }
+    return data;
+  } catch (error) {
+    return false;
+  }
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -87,4 +107,5 @@ module.exports = {
   deleteUser,
   login,
   changePassword,
+  verifyToken
 };
