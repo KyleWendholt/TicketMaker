@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 ###
 
-POST  http://127.0.0.1:3003/api/v1/users/login
+POST  http://127.0.0.1:3003/api/v1/auth
 Content-Type: application/json
   
   {
@@ -23,7 +23,7 @@ POST  http://127.0.0.1:3003/api/v1/users/changePassword
 Content-Type: application/json
 
   {
-    "JWTtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2NDQ5M2UxOTg5ZWYzNDA1MjI3NDkzYWYiLCJ1c2VybmFtZSI6InRlc3QiLCJ0aW1lc3RhbXAiOiJUaHUgTWF5IDE4IDIwMjMgMjI6MzU6NTYgR01ULTA0MDAgKEVhc3Rlcm4gRGF5bGlnaHQgVGltZSkiLCJpYXQiOjE2ODMyNTQxNTZ9.H6_aaXhYM7I71Ebb95jpGvzfepqgFaKkVPMwVNV1I88",
+    "JWTtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI2NDQ5M2UxOTg5ZWYzNDA1MjI3NDkzYWYiLCJ1c2VybmFtZSI6InRlc3QiLCJ0aW1lc3RhbXAiOiJTdW4gTWF5IDIxIDIwMjMgMTQ6MjU6MDQgR01ULTA0MDAgKEVhc3Rlcm4gRGF5bGlnaHQgVGltZSkiLCJpYXQiOjE2ODM0ODM5MDR9.VyHZVGc_R7jftl47_uGfDtKmBLxQAsIw_bw7ucdUxDQ",
     "oldPassword": "test",
     "newPassword": "test"
   }

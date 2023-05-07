@@ -1,6 +1,7 @@
 const express = require("express");
 const tickets = require("../models/tickets.js");
 const app = express.Router();
+const {authToken} = require('../models/auth.js');
 
 app.get("/", (req, res) => {
   tickets
