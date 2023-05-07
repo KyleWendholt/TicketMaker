@@ -1,12 +1,24 @@
 import { api } from "./session";
-import type { ListEnvelope, User } from "./users"
+import type { ListEnvelope, User } from "./users";
 
-export class Ticket {
-  public _id: string = "";
-  public userID: string = "";
-  public time: string = "";
-  public content: string = "";
+export interface Ticket {
+  _id: string;
+  title: string;
+  owner_id: string;
+  creationTime: string;
+  status: string;
+  content: { description: string; updates: TicketUpdate[] };
 }
+
+export interface TicketUpdate {
+  timestamp: Date;
+  content: string;
+  author_id: string;
+  private: boolean;
+  previousStatus: string;
+  newStatus: string;
+}
+
 
 export function getTickets() {
   return api<ListEnvelope<Ticket>>("tickets");
@@ -16,12 +28,14 @@ export function userTickets(id: string) {
   return api<ListEnvelope<Ticket>>("tickets/" + id);
 }
 
-export function addTicket(user: User, date: string, content: string) {
+export function addTicket(user: User, date: string, description: string) {
   const Ticket = {
     userID: user._id,
     time: date,
-    content: content,
-  }
+    content: {
+      description: description,
+    },
+  };
   console.log(Ticket);
   return api<Ticket>("tickets", Ticket, "POST");
 }
