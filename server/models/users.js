@@ -55,7 +55,7 @@ async function addUser(user) {
     return false;
   }
   const result = await db.insertOne(user);
-  return result.insertedCount === 1;
+  return result;
 }
 
 

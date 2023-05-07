@@ -6,13 +6,20 @@ const app = express.Router();
 app.post("/register", (req,res,next)=>{
   users
     .addUser(req.body)
-    .then((x) => res.status(200).send(x))
+    .then((result) => {
+      if(result){
+        res.status(201).send(result.insertedId);
+      }
+      else{
+        res.status(400).send("User already exists");
+      }
+    })
     .catch(next);
 })
 .post('/changePassword', (req,res,next)=>{
   const auth = authToken(req.body.JWTtoken);
   if (typeof auth === 'string') {
-    res.status(400).send(auth);
+    res.status(401).send(auth);
     return;
   }
   users

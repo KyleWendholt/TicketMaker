@@ -3,7 +3,7 @@ const {ObjectId} = require('mongodb');
 
 async function collection() {
   const client = await connect();
-  return client.db('TicketMaker').collection('exercises');
+  return client.db('TicketMaker').collection('tickets');
 }
 
 async function getTickets() {
@@ -20,8 +20,9 @@ async function getTicket(id) {
 
 async function addTicket(ticket) {
   const db = await collection();
-  await db.insertOne(ticket);
-  return ticket;
+  const result = await db.insertOne(ticket);
+  console.log(result);
+  return result;
 }
 
 async function updateTicket(id, ticket) {
