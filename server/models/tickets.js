@@ -25,6 +25,12 @@ async function addTicket(ticket) {
   return result;
 }
 
+async function getTicketsByOwner(owner_id) {
+  const db = await collection();
+  const data = await db.find({owner_id: owner_id}).toArray();
+  return {total: data.length, list: data};
+}
+
 async function updateTicket(id, ticket) {
   const db = await collection();
   await db.updateOne({_id: new ObjectId(id)}, {$set: ticket});
@@ -43,4 +49,5 @@ module.exports = {
   addTicket,
   updateTicket,
   deleteTicket,
+  getTicketsByOwner
 };

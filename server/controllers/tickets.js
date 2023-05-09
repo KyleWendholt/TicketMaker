@@ -3,9 +3,25 @@ const tickets = require("../models/tickets.js");
 const app = express.Router();
 const {authToken} = require('../models/auth.js');
 
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === "string") {
+    res.status(400).send(auth);
+    return;
+  }
   tickets
     .getTickets()
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
+.get("/mine", (req, res, next) => {
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === "string") {
+    res.status(400).send(auth);
+    return;
+  }
+  tickets
+    .getTicketsByOwner(auth.userid)
     .then((x) => res.status(200).send(x))
     .catch(next);
 })
@@ -41,5 +57,26 @@ app.get("/", (req, res) => {
     })
     .catch(next);
 })
+.post("/update/:id", (req, res, next) => {
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === "string") {
+    res.status(400).send(auth);
+    return;
+  }
+  tickets.
+    updateTicket(req.body._id, req.body.updates)
+    .then((result) => {
+      if (result === true) {
+        res.status(200).send("Ticket updated successfully");
+      } else {
+        res.status(400).send(result);
+      }
+    })
+    .catch(next);
+})
+
+        
+
+
 
 module.exports = app;

@@ -30,7 +30,8 @@ async function login(username, password) {
   if (!user) {
     return "Username or password is incorrect";
   }
-  if (bcrypt.compare(password, user.password)) {
+  console.log(password);
+  if (await bcrypt.compare(password, user.password)) {
     const numWeeks = 2;
     const date = new Date();
     date.setDate(date.getDate() + numWeeks * 7);
