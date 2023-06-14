@@ -1,4 +1,5 @@
 import { api } from "./session";
+import type { ListEnvelope } from "./session";
 
 export interface User {
   _id: string;
@@ -8,10 +9,7 @@ export interface User {
   password: string;
 }
 
-export interface ListEnvelope<T> {
-  list: T[];
-  total: number;
-}
+
 
 export function autocompleteUsers(query: string) {
   return api<ListEnvelope<User>>("users/autocomplete/" + query);

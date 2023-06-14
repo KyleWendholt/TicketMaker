@@ -3,7 +3,41 @@ const users = require("../models/users.js");
 const { authToken } = require("../models/auth.js");
 const app = express.Router();
 
-app.post("/register", (req,res,next)=>{
+app
+.get("/", (req,res,next)=>{
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === 'string') {
+    res.status(401).send(auth);
+    return;
+  }
+  users
+    .getUsers()
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
+.get("/me", (req,res,next)=>{
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === "string") {
+    res.status(401).send(auth);
+    return;
+  }
+  users
+    .getUser(auth.userid)
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
+.get("/:id", (req,res,next)=>{
+  const auth = authToken(req.body.JWTtoken);
+  if (typeof auth === "string") {
+    res.status(401).send(auth);
+    return;
+  }
+  users
+    .getUser(req.params.id)
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
+.post("/register", (req,res,next)=>{
   users
     .addUser(req.body)
     .then((result) => {

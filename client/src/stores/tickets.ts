@@ -1,5 +1,6 @@
 import { api } from "./session";
-import type { ListEnvelope, User } from "./users";
+import type { ListEnvelope } from "./session";
+import type { User } from "./users";
 
 export interface Ticket {
   _id: string;
