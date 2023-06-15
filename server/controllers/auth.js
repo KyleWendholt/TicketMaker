@@ -6,7 +6,7 @@ const auth = require("../models/auth.js");
 app.post("/", (req, res, next) => {
   auth
     .login(req.body.username, req.body.password)
-    .then((x) => res.status(200).send(x))
+    .then(token => res.cookie("JWTtoken", token).sendStatus(200))
     .catch(next);
 })
 
