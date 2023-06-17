@@ -13,6 +13,7 @@ async function collection() {
 
 //returns the data from the JWT token if it is valid, otherwise returns an error message
 function authToken(JWTtoken) {
+  console.log(JWTtoken);
   try {
     data = jwt.verify(JWTtoken, JWT_SECRET);
     if (data.timestamp < new Date().toString()) {
@@ -35,6 +36,11 @@ async function login(username, password) {
     const numWeeks = 2;
     const date = new Date();
     date.setDate(date.getDate() + numWeeks * 7);
+    console.log({
+      userid: user._id,
+      username: user.username,
+      timestamp: date.toString(),
+    });
     const token = jwt.sign(
       {
         userid: user._id,
@@ -43,7 +49,7 @@ async function login(username, password) {
       },
       JWT_SECRET
     );
-    return token;
+    return {token: token, response: "Login successful"};
   }
   return "Username or password is incorrect";
 }
