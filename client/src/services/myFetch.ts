@@ -9,6 +9,8 @@ export default function myFetch<T>(
     method: method ?? (data ? "POST" : "GET"),
     headers: {
       "Content-Type": "application/json",
+      //"Authorization": "Bearer " + localStorage.getItem("JWTtoken"),
+      Authorization: "Bearer " + document.cookie,
     },
     body: data ? JSON.stringify(data) : undefined,
   };
