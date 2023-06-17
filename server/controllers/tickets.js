@@ -4,9 +4,10 @@ const app = express.Router();
 const {authToken} = require('../models/auth.js');
 
 app.get("/", (req, res, next) => {
-  const auth = authToken(req.body.JWTtoken);
-  if (typeof auth === "string") {
-    res.status(400).send(auth);
+  console.log(req.headers);
+  const auth = authToken(req.header.authorization);
+  if (auth === "string") {
+    res.status(401).send();
     return;
   }
   tickets
@@ -14,10 +15,32 @@ app.get("/", (req, res, next) => {
     .then((x) => res.status(200).send(x))
     .catch(next);
 })
+.get("/open", (req, res, next) => {
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
+    return;
+  }
+  tickets
+    .getOpenTickets()
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
+.get("/problem", (req, res, next) => {
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
+    return;
+  }
+  tickets
+    .getProblemTickets()
+    .then((x) => res.status(200).send(x))
+    .catch(next);
+})
 .get("/mine", (req, res, next) => {
-  const auth = authToken(req.body.JWTtoken);
-  if (typeof auth === "string") {
-    res.status(400).send(auth);
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
     return;
   }
   tickets
@@ -26,23 +49,30 @@ app.get("/", (req, res, next) => {
     .catch(next);
 })
 .get("/:id", (req, res, next) => {
-    tickets
-      .getTicket(req.params.id)
-      .then((x) => res.status(200).send(x))
-      .catch(next);
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
+    return;
+  }
+  tickets
+    .getTicket(req.params.id)
+    .then((x) => res.status(200).send(x))
+    .catch(next);
 })
 .post("/", (req, res, next) => {
-  const auth = authToken(req.body.JWTtoken);
-  if (typeof auth === "string") {
-    res.status(400).send(auth);
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
     return;
   }
   const ticket = {
     owner_id: auth.userid,
-    creationTime: new Date(),
+    timestamp: new Date(),
     title: req.body.title,
     status: req.body.status,
     content: req.body.content,
+    responsibility: req.body.responsibility,
+    
   };
   console.log(ticket);
   tickets
@@ -58,9 +88,9 @@ app.get("/", (req, res, next) => {
     .catch(next);
 })
 .post("/update/:id", (req, res, next) => {
-  const auth = authToken(req.body.JWTtoken);
-  if (typeof auth === "string") {
-    res.status(400).send(auth);
+  const auth = authToken(req.header.Authorization);
+  if (auth === "string") {
+    res.status(401).send();
     return;
   }
   tickets.

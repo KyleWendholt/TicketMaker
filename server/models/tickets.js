@@ -25,6 +25,18 @@ async function addTicket(ticket) {
   return result;
 }
 
+async function getOpenTickets() {
+  const db = await collection();
+  const data = await db.find({status: "open"}).toArray();
+  return {total: data.length, list: data};
+}
+
+async function getProblemTickets() {
+  const db = await collection();
+  const data = await db.find({status: "problem"}).toArray();
+  return {total: data.length, list: data};
+}
+
 async function getTicketsByOwner(owner_id) {
   const db = await collection();
   const data = await db.find({owner_id: owner_id}).toArray();
@@ -49,5 +61,7 @@ module.exports = {
   addTicket,
   updateTicket,
   deleteTicket,
-  getTicketsByOwner
+  getTicketsByOwner,
+  getOpenTickets,
+  getProblemTickets,
 };

@@ -7,6 +7,8 @@ export interface Ticket {
   title: string;
   owner_id: string;
   creationTime: string;
+  responsibility: string;
+  timestamp: Date;
   status: string;
   content: { description: string; updates: TicketUpdate[] };
 }
@@ -20,19 +22,23 @@ export interface TicketUpdate {
   newStatus: string;
 }
 
-
 export function getTickets() {
   return api<ListEnvelope<Ticket>>("tickets");
+}
+
+export function getProblemTickets() {
+  return api<ListEnvelope<Ticket>>("tickets/problems");
 }
 
 export function userTickets(id: string) {
   return api<ListEnvelope<Ticket>>("tickets/" + id);
 }
 
-export function addTicket(user: User, date: string, description: string) {
+export function addTicket(title: string, description: string, privacy: boolean, status: string) {
   const Ticket = {
-    userID: user._id,
-    time: date,
+    title: title,
+    private: privacy,
+    status: status,
     content: {
       description: description,
     },
