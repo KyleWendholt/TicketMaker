@@ -1,23 +1,28 @@
 <template>
   <div class="panel">
     <p class="panel-heading">Problems</p>
-    <div class="columns">
-      <div class="column">ticket id</div>
-      <div class="column">ticket title</div>
-      <div class="column">status</div>
-      <div class="column">responsibility</div>
-      <div class="column">time created</div>
+    <div>
+      <TicketComponent v-for="ticket in problemTickets" :ticket="ticket" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue';
+import TicketComponent from './Ticket.vue'
+import { Ticket } from '../stores/tickets';
+import { getProblemTickets } from '../stores/tickets';
 
+const problemTickets = reactive([] as Ticket[]);
+updateTickets();
 
+function updateTickets() {
+  getProblemTickets().then((tickets) => {
+    problemTickets.splice(0, problemTickets.length, ...tickets.list);
+  });
+}
 </script>
 
 <style scoped>
-.columns {
-  margin: 0px;
-}
+
 </style>
