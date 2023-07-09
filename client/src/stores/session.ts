@@ -8,17 +8,11 @@ const session = reactive({
   loading: 0,
   error: null as string | null,
   messages: [] as Message[],
+  token: null as string | null,
 });
 
 export function login(username: string, password: string) {
-  api<String>("auth", { username, password }, "POST")
-    .then((response) => {
-      if (response) {
-        console.log(document.cookie);
-        const user = localStorage.getItem("JWTtoken");
-        console.log("token is " + user);
-      }
-    })
+  return api<{accessToken:string}>("auth/login", { username, password }, "POST");
 }
 
 

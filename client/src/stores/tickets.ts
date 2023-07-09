@@ -43,7 +43,7 @@ export function addTicket(title: string, description: string, privacy: boolean, 
       description: description,
     },
   };
-  console.log(Ticket);
+  console.log("ticket is " + Ticket);
   return api<Ticket>("tickets", Ticket, "POST");
 }
 

@@ -1,4 +1,5 @@
 export const API_ROOT = import.meta.env.VITE_API_ROOT;
+import session from "../stores/session";
 
 export default function myFetch<T>(
   url: string,
@@ -11,7 +12,7 @@ export default function myFetch<T>(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + document.cookie,
+      "Authorization": "Bearer " + session.token,
     },
     body: data ? JSON.stringify(data) : undefined,
   };

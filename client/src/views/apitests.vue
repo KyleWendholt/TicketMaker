@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1>API Tests</h1>
-    <form class="box" @submit.prevent="login(username,password)">
+    <form class="box" @submit.prevent="login(username, password).then(x => {
+    session.token = x.accessToken;
+    console.log(x);
+  });">
       <div class="field">
         <label class="label">Username</label>
         <div class="control">
@@ -31,6 +34,7 @@
 import { getTickets } from '../stores/tickets';
 import { ref } from 'vue';
 import { login } from '../stores/session';
+import session from '../stores/session';
 
 const password = ref("");
 const username = ref("");
