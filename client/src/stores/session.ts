@@ -15,6 +15,13 @@ export function login(username: string, password: string) {
   return api<{accessToken:string}>("auth/login", { username, password }, "POST");
 }
 
+export function register(user: User) {
+  return api<{accessToken:string}>("auth/register", { user }, "POST");
+}
+
+export function refreshToken(){
+  return api<{accessToken:string}>("auth/refresh", null, "POST");
+}
 
 export function logout() {
   session.user = null;

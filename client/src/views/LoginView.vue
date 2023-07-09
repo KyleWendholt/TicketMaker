@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="box" @submit.prevent="login(username,password)">
+    <form class="box" @submit.prevent="login(username,password).then(x => session.token = x.accessToken)">
       <div class="field">
         <label class="label">Username</label>
         <div class="control">
@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { login } from '../stores/session';
+import session from '../stores/session';
 
 const password = ref("");
 const username = ref("");
