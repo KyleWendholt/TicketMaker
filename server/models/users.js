@@ -15,14 +15,12 @@ async function getUsers() {
 }
 
 async function getUser(id) {
-  console.log("id is " + id);
   const db = await collection();
   const data = await db.findOne({_id: new ObjectId(id)});
   return data;
 }
 
 async function updateUser(id, user) {
-  console.log('params are '+id+' '+user);
   const db = await collection();
   const result = await db.updateOne({_id: new ObjectId(id)}, {$set: user});
   return result.modifiedCount === 1 ? true : "No users updated";

@@ -5,7 +5,6 @@ const { authToken } = require("../models/auth.js");
 
 app
   .get("/", authToken, (req, res, next) => {
-    console.log("headers are " + req.headers);
     tickets
       .getTickets()
       .then((x) => res.status(200).send(x))
@@ -17,17 +16,13 @@ app
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
-  .get("/problem", authToken, (req, res, next) => {
+  .get("/problems", authToken, (req, res, next) => {
     tickets
       .getProblemTickets()
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
   .get("/mine", authToken, (req, res, next) => {
-    if (auth === "string") {
-      res.status(401).send();
-      return;
-    }
     tickets
       .getTicketsByOwner(req.user.userid)
       .then((x) => res.status(200).send(x))
@@ -58,7 +53,6 @@ app
       content: req.body.content,
       responsibility: req.body.responsibility,
     };
-    console.log("ticket is " + ticket);
     tickets
       .addTicket(ticket)
       .then((result) => {

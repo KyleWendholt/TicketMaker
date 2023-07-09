@@ -1,5 +1,5 @@
-const {connect} = require('./mongo');
-const {ObjectId} = require('mongodb');
+const { connect } = require("./mongo");
+const { ObjectId } = require("mongodb");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -8,18 +8,29 @@ const REFRESH_JWT_SECRET = process.env.REFRESH_JWT_SECRET ?? "";
 
 async function collection() {
   const client = await connect();
-  return client.db('TicketMaker').collection('users');
+  return client.db("TicketMaker").collection("users");
 }
 
-
-function authToken(req,res,next) {
-  console.log(req)
+function authToken(req, res, next) {
   const authheader = req.headers["authorization"];
   const token = authheader && authheader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, ACCESS_JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+
+function authRefreshToken(req, res, next) {
+  const cookie = req.headers.cookie;
+  const token = cookie && cookie.split("refreshToken=")[1]?.split(";")[0];
+  console.log(token);
+  if (token == null) return res.sendStatus(401);
+  jwt.verify(token, REFRESH_JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    user = { username: user.username, role: user.role };
     req.user = user;
     next();
   });
@@ -51,5 +62,6 @@ module.exports = {
   authToken,
   refreshTokenLife,
   generateAccessToken,
-  generateRefreshToken
+  generateRefreshToken,
+  authRefreshToken,
 };
