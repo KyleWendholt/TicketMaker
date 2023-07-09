@@ -3,7 +3,8 @@ const {ObjectId} = require('mongodb');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const JWT_SECRET = process.env.JWT_SECRET ?? "";
+const ACCESS_JWT_SECRET = process.env.ACCESS_JWT_SECRET ?? "";
+const REFRESH_JWT_SECRET = process.env.REFRESH_JWT_SECRET ?? "";
 
 async function collection() {
   const client = await connect();
@@ -11,50 +12,44 @@ async function collection() {
 }
 
 
-//returns the data from the JWT token if it is valid, otherwise returns an error message
-function authToken(JWTtoken) {
-  console.log(JWTtoken);
-  try {
-    data = jwt.verify(JWTtoken, JWT_SECRET);
-    if (data.timestamp < new Date().toString()) {
-      throw new Error("Token expired");
-    }
-    return data;
-  } catch (error) {
-    return error.message;
-  }
+function authToken(req,res,next) {
+  console.log(req)
+  const authheader = req.headers["authorization"];
+  const token = authheader && authheader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, ACCESS_JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
 }
 
-async function login(username, password) {
+async function authenticateUser(username, password) {
   const db = await collection();
   const user = await db.findOne({ username: username });
   if (!user) {
-    return "Username or password is incorrect";
+    return null;
   }
-  console.log(password);
   if (await bcrypt.compare(password, user.password)) {
-    const numWeeks = 2;
-    const date = new Date();
-    date.setDate(date.getDate() + numWeeks * 7);
-    console.log({
-      userid: user._id,
-      username: user.username,
-      timestamp: date.toString(),
-    });
-    const token = jwt.sign(
-      {
-        userid: user._id,
-        username: user.username,
-        timestamp: date.toString(),
-      },
-      JWT_SECRET
-    );
-    return {token: token, response: "Login successful"};
+    return user;
   }
-  return "Username or password is incorrect";
 }
 
+function generateAccessToken(user) {
+  return jwt.sign(user, ACCESS_JWT_SECRET, { expiresIn: "15m" });
+}
+
+function generateRefreshToken(user) {
+  return jwt.sign(user, REFRESH_JWT_SECRET, { expiresIn: "7d" });
+}
+
+const refreshTokenLife = 60 * 60 * 24 * 7;
+
 module.exports = {
-  login,
+  authenticateUser,
   authToken,
+  refreshTokenLife,
+  generateAccessToken,
+  generateRefreshToken
 };

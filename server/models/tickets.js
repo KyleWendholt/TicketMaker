@@ -21,7 +21,7 @@ async function getTicket(id) {
 async function addTicket(ticket) {
   const db = await collection();
   const result = await db.insertOne(ticket);
-  console.log(result);
+  console.log('addTicket result' +result);
   return result;
 }
 

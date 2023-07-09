@@ -33,7 +33,7 @@ app
     return;
   }
   users
-    .getUser(req.params.id)
+    .getUser(id)
     .then((x) => res.status(200).send(x))
     .catch(next);
 })

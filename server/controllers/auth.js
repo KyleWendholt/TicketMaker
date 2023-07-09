@@ -3,22 +3,18 @@ const app = express.Router();
 const auth = require("../models/auth.js");
 
 
-app.post("/", (req, res, next) => {
+app.post("/login", (req, res, next) => {
   auth
-    .login(req.body.username, req.body.password)
-      .then(x => {
-        if (typeof x === "string") {
-          res.status(401).send(x);
+    .authenticateUser(req.body.username, req.body.password)
+      .then(user => {
+        if (!user) {
+          res.status(401).send("Invalid username or password");
           return;
         }
-        const token = x.token;
-        res.cookie("JWTtoken", token, {
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-          path: "/",
-          sameSite: "none",
-          secure: true,
-        }).sendStatus(200)
-        console.log("cookie set");
+        const accessToken = auth.generateAccessToken(user);
+        const refreshToken = auth.generateRefreshToken(user);
+        res.status(200).setHeader('set-cookie', `refreshToken=${refreshToken}; Path=/; HttpOnly; Max-Age=${auth.refreshTokenLife}; SameSite=None; Secure`)
+        .send({ accessToken });
       })
     .catch(next);
 })
