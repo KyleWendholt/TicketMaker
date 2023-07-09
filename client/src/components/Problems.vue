@@ -18,7 +18,9 @@ updateTickets();
 
 function updateTickets() {
   getProblemTickets().then((tickets) => {
+    if (tickets.list){
     problemTickets.splice(0, problemTickets.length, ...tickets.list);
+  }
   });
 }
 </script>

@@ -43,7 +43,6 @@ export function addTicket(title: string, description: string, privacy: boolean, 
       description: description,
     },
   };
-  console.log("ticket is " + Ticket);
   return api<Ticket>("tickets", Ticket, "POST");
 }
 
@@ -52,6 +51,5 @@ export function updateTicket(id: string, Ticket: Ticket) {
 }
 
 export function deleteTicket(id: string) {
-  console.log("delete" + id);
   return api<boolean>("tickets/" + id, null, "DELETE");
 }

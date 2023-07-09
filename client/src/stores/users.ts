@@ -2,12 +2,12 @@ import { api } from "./session";
 import type { ListEnvelope } from "./session";
 
 export interface User {
-  _id: string;
+  _id: string | null;
   firstname: string;
   lastname: string;
   username: string;
   password: string;
-  isAdmin: boolean;
+  role: string;
   profilePic: string;
 }
 
