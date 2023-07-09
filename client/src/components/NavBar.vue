@@ -10,8 +10,8 @@
       </a>
 
       <a
-        :class="{ 'is-active': isActive }"
-        @click="isActive = !isActive"
+        :class="{ 'is-active': isMenuActive }"
+        @click="isMenuActive = !isMenuActive"
         role="button"
         class="navbar-burger"
         aria-label="menu"
@@ -45,10 +45,16 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-primary">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light"> Log in </a>
+            <router-link
+              v-if="session.user"
+              class="button is-primary"
+              to="/logout"
+            >
+              <strong>Logout</strong>
+            </router-link>
+            <router-link v-else class="button is-primary" to="/login">
+              <strong>Login</strong>
+            </router-link>
           </div>
         </div>
       </div>
