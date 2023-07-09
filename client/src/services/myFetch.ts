@@ -7,10 +7,11 @@ export default function myFetch<T>(
 ): Promise<T> {
   const options: RequestInit = {
     method: method ?? (data ? "POST" : "GET"),
+    mode: "cors",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      //"Authorization": "Bearer " + localStorage.getItem("JWTtoken"),
-      Authorization: "Bearer " + document.cookie,
+      "Authorization": "Bearer " + document.cookie,
     },
     body: data ? JSON.stringify(data) : undefined,
   };

@@ -12,7 +12,12 @@ app.post("/", (req, res, next) => {
           return;
         }
         const token = x.token;
-        res.cookie("JWTtoken", token).sendStatus(200)
+        res.cookie("JWTtoken", token, {
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          path: "/",
+          sameSite: "none",
+          secure: true,
+        }).sendStatus(200)
         console.log("cookie set");
       })
     .catch(next);
