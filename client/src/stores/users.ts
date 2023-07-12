@@ -8,7 +8,8 @@ export interface User {
   username: string;
   password: string;
   role: string;
-  profilePic: string;
+  email: string;
+  profilePicture: string;
 }
 
 
@@ -29,8 +30,8 @@ export function addUser(user:{
   firstname: string;
   lastname: string;
   username: string;
-  profilePic: string;
-  isAdmin: boolean;
+  profilePicture: string;
+  role: boolean;
   password: string;
 }) {
   return api<User>("users", user, "POST");

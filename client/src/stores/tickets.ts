@@ -6,7 +6,7 @@ export interface Ticket {
   _id: string;
   title: string;
   owner_id: string;
-  creationTime: string;
+  creationTime: Date;
   responsibility: string;
   timestamp: Date;
   status: string;
