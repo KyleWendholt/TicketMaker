@@ -94,7 +94,7 @@ const lastName = ref("");
 
 
 function registerUser() {
-  register({username:username.value, password:password.value, profilePic:profilePic.value,role:role.value,firstname:firstName.value,lastname:lastName.value,_id:null}).then(x => {
+  register({username:username.value, password:password.value, profilePicture:profilePicture.value,role:role.value,firstname:firstName.value,lastname:lastName.value,_id:null}).then(x => {
     session.token = x.accessToken;
   });
 }
