@@ -28,22 +28,5 @@ app.post("/login", (req, res, next) => {
   res.status(200).setHeader('set-cookie', `refreshToken=; Path=/; HttpOnly; Max-Age=0; SameSite=None; Secure`)
   .send();
 })
-.post("/register", (req, res, next) => {
-  const user = {
-    username: req.body.username,
-    password: req.body.password,
-    role: req.body.role,
-    profilePicture: req.body.profilePicture,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-  };
-  users
-    .createUser(user)
-    .then(() => {
-      res.status(201).send();
-    })
-    .catch(next);
-});
 
 module.exports = app;

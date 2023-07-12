@@ -39,7 +39,7 @@ app
 })
 .post("/register", (req,res,next)=>{
   users
-    .addUser(req.body)
+    .addUser(req.body.user)
     .then((result) => {
       if(result){
         res.status(201).send(result.insertedId);
