@@ -12,7 +12,7 @@ export default function myFetch<T>(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + session.token,
+      Authorization: "Bearer " + session.token,
     },
     body: data ? JSON.stringify(data) : undefined,
   };
@@ -20,9 +20,7 @@ export default function myFetch<T>(
     if (x.ok) {
       return x.json();
     } else {
-      return x.json().then((y) => {
-        throw y;
-      });
+      throw {message: x.statusText,status: x.status};
     }
   });
 }
