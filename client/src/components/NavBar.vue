@@ -5,9 +5,9 @@
     aria-label="main navigation"
   >
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
-        <img src="" width="112" height="28" />
-      </a>
+      <span class="navbar-item" href="">
+        <font-awesome-icon icon="home" />
+      </span>
 
       <a
         :class="{ 'is-active': isMenuActive }"
@@ -33,13 +33,14 @@
         <router-link to="/" class="navbar-item"> Home </router-link>
 
         <router-link class="navbar-item" to="/profile"> Profile </router-link>
-          <router-link
-            v-if="session.user?.isAdmin"
-            class="navbar-item"
-            to="/admin"
-          >
-            Admin
-          </router-link>
+
+        <router-link
+          v-if="session.user?.role === 'admin'"
+          class="navbar-item"
+          to="/admin"
+        >
+          Admin
+        </router-link>
       </div>
 
       <div class="navbar-end">
