@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="box" @submit.prevent="login(username,password).then(x => session.token = x.accessToken)">
+    <form class="box" @submit.prevent="login(username,password)">
       <div class="field">
         <label class="label">Username</label>
         <div class="control">

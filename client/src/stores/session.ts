@@ -13,27 +13,39 @@ const session = reactive({
 });
 
 export function login(username: string, password: string) {
-  return api<{ accessToken: string }>(
+  api<{ accessToken: string, user: User}>(
     "auth/login",
     { username, password },
     "POST"
+  ).then((res) => {
+    if (res.accessToken) {
+      session.token = res.accessToken;
+      session.user = res.user;
+      router.push("/");
+    }
+  }
   );
 }
 
 export function register(user: User) {
-  return api<{ accessToken: string }>("auth/register", { user }, "POST");
+  return api<{ accessToken: string, user:User }>("auth/register", { user }, "POST");
 }
 
 async function refreshToken() {
-  return api<{ accessToken: string }>("auth/refresh", null, "POST");
+  return api<{ accessToken: string, user: User }>("auth/refresh", null, "POST");
 }
 
-export async function logout() {
+export function logout() {
   clearError();
   session.user = null;
   session.token = null;
   router.push("/login");
-  return api("auth/logout", null, "POST");
+  api("auth/logout", null, "POST").then(() => {
+    console.log("logged out");
+    return;
+  }
+  );
+  return;
 }
 
 export async function api<T>(url: string, data: any = null, method?: string) {
@@ -52,18 +64,17 @@ export async function api<T>(url: string, data: any = null, method?: string) {
 export function reAuthenticate() {
   console.log("reauthenticating");
   refreshToken().then((res) => {
-    console.log(res);
     if (res.accessToken) {
       session.token = res.accessToken;
+      session.user = res.user;
       console.log("reauthenticated");
       clearError();
       return true;
     } else {
       console.log("reauthentication failed");
       //const error = session.error;
-      logout().then(() => {
-        return false;
-      });
+      logout();
+      return false;
     }
   });
   return false;
