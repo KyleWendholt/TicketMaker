@@ -6,7 +6,7 @@
   >
     <div class="navbar-brand">
       <span class="navbar-item" href="">
-        <font-awesome-icon icon="home" />
+        <font-awesome-icon icon="ticket" />
       </span>
 
       <a
@@ -32,27 +32,38 @@
       <div class="navbar-start">
         <router-link to="/" class="navbar-item"> Home </router-link>
 
+        <router-link class="navbar-item" to="/tickets"> All Tickets </router-link>
+
         <router-link class="navbar-item" to="/profile"> Profile </router-link>
 
         <router-link
-          v-if="session.user?.role === 'admin'"
+          v-if="session.user?.role === 'Admin'"
           class="navbar-item"
           to="/admin"
         >
           Admin
         </router-link>
+
+        <a
+          class="navbar-item"
+          v-if="session.user"
+          @click="
+            newTicketsActive = true;          "
+        >
+          New Ticket
+        </a>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <router-link
+            <a
               v-if="session.user"
               class="button is-primary"
-              to="/logout"
+              @click="logout()"
             >
               <strong>Logout</strong>
-            </router-link>
+            </a>
             <router-link v-else class="button is-primary" to="/login">
               <strong>Login</strong>
             </router-link>
@@ -61,14 +72,26 @@
       </div>
     </div>
   </nav>
+  <new-ticket-modal
+  :is-active="newTicketsActive"
+  v-if="session.user"
+  @close="newTicketsActive = false"/>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import session from "../stores/session";
+import { logout } from "../stores/session";
+import NewTicketModal from "./NewTicketModal.vue";
 
-let isMenuActive = ref(false);
+const newTicketsActive = ref(false);
+const isMenuActive = ref(false);
+
+
+
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
