@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="columns">
-      <div class="column">{{ ticket._id }}</div>
+      <div class="column"><a @click="openTicket(ticket._id)">{{ ticket._id }}</a></div>
       <div class="column">{{ticket.title}}</div>
       <div class="column">{{ticket.status}}</div>
       <div class="column">{{ticket.responsibility}}</div>
@@ -13,10 +13,17 @@
 <script setup lang="ts">
 import { Ticket } from '../stores/tickets';
 
-const props = defineProps<{
+const emit = defineEmits(
+  ["openTicket"]
+);
+
+defineProps<{
   ticket: Ticket;
 }>();
 
+function openTicket(id: string) {
+  emit("openTicket", id);
+}
 
 </script>
 
