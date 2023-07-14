@@ -26,11 +26,10 @@ function authToken(req, res, next) {
 function authRefreshToken(req, res, next) {
   const cookie = req.headers.cookie;
   const token = cookie && cookie.split("refreshToken=")[1]?.split(";")[0];
-  console.log(token);
   if (token == null) return res.sendStatus(401);
-  jwt.verify(token, REFRESH_JWT_SECRET, (err, user) => {
+  jwt.verify(token, REFRESH_JWT_SECRET, (err, payload) => {
+    const { iat, exp, ...user } = payload;
     if (err) return res.sendStatus(403);
-    user = { username: user.username, role: user.role };
     req.user = user;
     next();
   });
