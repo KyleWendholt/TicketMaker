@@ -20,7 +20,10 @@ app.use("/", express.static("./client/dist"));
 
 app.use(express.json());
 
-app.use("/api/v1/tickets", ticketsController).use("/api/v1/users", usersController).use("/api/v1/auth", authController);
+app
+  .use("/api/v1/tickets", ticketsController)
+  .use("/api/v1/users", usersController)
+  .use("/api/v1/auth", authController);
 
 app.listen(port, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
