@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <p class="panel-heading">Problems</p>
+    <p class="panel-heading">Assigned Tickets</p>
     <div class="columns">
       <div class="column">ticket id</div>
       <div class="column">ticket title</div>
