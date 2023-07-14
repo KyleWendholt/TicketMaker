@@ -15,10 +15,26 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
-      path: '/apitest',
-      name: 'apitest',
-      component: () => import('../views/apitests.vue'),
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
     },
+    {
+      path: '/tickets',
+      name: 'tickets',
+      component: () => import('../views/AllTicketsView.vue'),
+    },
+    {
+      path: '/ticket/:id',
+      name: 'ticket',
+      component: () => import('../views/TicketView.vue'),
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/AdminView.vue'),
+    },
+    
   ]
 });
 
