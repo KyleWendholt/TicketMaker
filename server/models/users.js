@@ -49,11 +49,13 @@ async function deleteUser(id) {
 async function addUser(user) {
   const db = await collection();
   user.password = await bcrypt.hash(user.password, 10);
-  if (await db.findOne({ username: user.username })) {
+  if (await db.findOne({ email: user.email })) {
     return false;
   }
+  user._id = new ObjectId();
   const result = await db.insertOne(user);
-  return result;
+  console.log(result);
+  return user;
 }
 
 module.exports = {

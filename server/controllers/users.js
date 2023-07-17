@@ -1,32 +1,24 @@
 const express = require("express");
 const users = require("../models/users.js");
-const { authToken } = require("../models/auth.js");
+const auth = require("../models/auth.js");
 const app = express.Router();
 
 app
-  .get("/", authToken, (req, res, next) => {
+  .get("/", auth.authToken, (req, res, next) => {
     users
       .getUsers()
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
   .get("/me", (req, res, next) => {
-    const auth = authToken(req.body.JWTtoken);
-    if (typeof auth === "string") {
-      res.status(401).send(auth);
-      return;
-    }
+
     users
-      .getUser(auth.userid)
+      .getUser(req.userid)
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
   .get("/:id", (req, res, next) => {
-    const auth = authToken(req.body.JWTtoken);
-    if (typeof auth === "string") {
-      res.status(401).send(auth);
-      return;
-    }
+  
     users
       .getUser(id)
       .then((x) => res.status(200).send(x))
@@ -35,21 +27,27 @@ app
   .post("/register", (req, res, next) => {
     users
       .addUser(req.body.user)
-      .then((result) => {
-        if (result) {
-          res.status(201).send(result.insertedId);
+      .then((user) => {
+        if (!user) {
+          res.status(400).send("User with email already exists");
         } else {
-          res.status(400).send("User already exists");
+          user = user;
+          const accessToken = auth.generateAccessToken(user);
+          const refreshToken = auth.generateRefreshToken(user);
+          const { password, ...userWithoutPassword } = user;
+          res
+            .status(201)
+            .setHeader(
+              "set-cookie",
+              `refreshToken=${refreshToken}; Path=/; HttpOnly; Max-Age=${auth.refreshTokenLife}; SameSite=None; Secure`
+            )
+            .send({ accessToken, user: userWithoutPassword });
         }
       })
       .catch(next);
   })
   .post("/changePassword", (req, res, next) => {
-    const auth = authToken(req.body.JWTtoken);
-    if (typeof auth === "string") {
-      res.status(401).send(auth);
-      return;
-    }
+  
     users
       .changePassword(auth.userid, req.body.oldPassword, req.body.newPassword)
       .then((result) => {
@@ -60,6 +58,13 @@ app
         }
       })
       .catch(next);
+  })
+  .delete("/:id", auth.authToken, (req, res, next) => {
+    if (req.user.roles.includes("Admin")) {
+    users.deleteUser(req.params.id).then((x) => res.status(200).send(x));
+    } else {
+      res.status(403).send("Not authorized");
+    }
   });
 
 module.exports = app;
