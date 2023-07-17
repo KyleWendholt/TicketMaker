@@ -39,20 +39,9 @@ app
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
-  .post("/", (req, res, next) => {
-    const auth = authToken(req.header.Authorization);
-    if (auth === "string") {
-      res.status(401).send();
-      return;
-    }
-    const ticket = {
-      owner_id: auth.userid,
-      timestamp: new Date(),
-      title: req.body.title,
-      status: req.body.status,
-      content: req.body.content,
-      responsibility: req.body.responsibility,
-    };
+  .post("/", authToken, (req, res, next) => {
+    const ticket = req.body.ticket;
+    console.log(ticket);
     tickets
       .addTicket(ticket)
       .then((result) => {

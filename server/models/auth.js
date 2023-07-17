@@ -35,9 +35,9 @@ function authRefreshToken(req, res, next) {
   });
 }
 
-async function authenticateUser(username, password) {
+async function authenticateUser(email, password) {
   const db = await collection();
-  const user = await db.findOne({ username: username });
+  const user = await db.findOne({ email: email });
   if (!user) {
     return null;
   }

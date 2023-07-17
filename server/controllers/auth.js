@@ -6,10 +6,10 @@ const users = require("../models/users.js");
 app
   .post("/login", (req, res, next) => {
     auth
-      .authenticateUser(req.body.username, req.body.password)
+      .authenticateUser(req.body.email, req.body.password)
       .then((user) => {
         if (!user) {
-          res.status(401).send("Invalid username or password");
+          res.status(403).send("Incorrect email or password");
           return;
         }
         const accessToken = auth.generateAccessToken(user);
