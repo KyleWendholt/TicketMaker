@@ -37,7 +37,7 @@
         <router-link class="navbar-item" to="/profile"> Profile </router-link>
 
         <router-link
-          v-if="session.user?.role === 'Admin'"
+          v-if="session.user?.roles.includes('Admin')"
           class="navbar-item"
           to="/admin"
         >
@@ -87,7 +87,6 @@ import NewTicketModal from "./NewTicketModal.vue";
 
 const newTicketsActive = ref(false);
 const isMenuActive = ref(false);
-
 
 
 </script>

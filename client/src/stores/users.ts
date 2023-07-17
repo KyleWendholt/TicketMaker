@@ -2,11 +2,10 @@ import { api } from "./session";
 import type { ListEnvelope } from "./session";
 
 export interface User {
-  _id: string | null;
+  _id: string;
   firstname: string;
   lastname: string;
-  username: string;
-  role: string;
+  roles: string[];
   email: string;
   profilePicture: string;
 }
@@ -21,25 +20,18 @@ export function getUsers() {
   return api<ListEnvelope<User>>("users");
 }
 
-export function getUser(username: string){
-  return api<User>("users/" + username);
+export function getUserById(id: string){
+  return api<User>("users/" + id);
 }
 
-export function addUser(user:{
-  firstname: string;
-  lastname: string;
-  username: string;
-  profilePicture: string;
-  role: boolean;
-  password: string;
-}) {
-  return api<User>("users", user, "POST");
+export function addUser(user: User) {
+  return api<User>("users", {user}, "POST");
 }
 
-export function deleteUser(user: User) {
-  return api<{sucess: boolean}>("users", user, "DELETE");
+export function deleteUser(_id: string) {
+  return api<{sucess: boolean}>("users", _id, "DELETE");
 }
 
-export function updateUser(updatedUser: User, username: string) {
-  return api("users/" + username, updatedUser, "PATCH");
+export function updateUser(updatedUser: User, _id: string) {
+  return api("users/" + _id, updatedUser, "PATCH");
 }
