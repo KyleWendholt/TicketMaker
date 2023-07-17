@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <form class="box" @submit.prevent="login(username,password)">
+    <form class="box" @submit.prevent="login(email,password)">
       <div class="field">
-        <label class="label">Username</label>
+        <label class="label">Email</label>
         <div class="control">
-          <input class="input" type="text" v-model="username" placeholder="Username">
+          <input class="input" type="text" v-model="email" placeholder="Email">
         </div>
       </div>
       <div class="field">
@@ -28,7 +28,7 @@ import { login } from '../stores/session';
 import session from '../stores/session';
 
 const password = ref("");
-const username = ref("");
+const email = ref("");
 </script>
 
 <style scoped>
