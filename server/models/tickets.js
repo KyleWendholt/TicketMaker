@@ -19,6 +19,7 @@ async function getTicket(id) {
 }
 
 async function addTicket(ticket) {
+  ticket._id = new ObjectId();
   const db = await collection();
   const result = await db.insertOne(ticket);
   return result;
@@ -26,13 +27,13 @@ async function addTicket(ticket) {
 
 async function getOpenTickets() {
   const db = await collection();
-  const data = await db.find({ status: "open" }).toArray();
+  const data = await db.find({ status: "Open" }).toArray();
   return { total: data.length, list: data };
 }
 
 async function getProblemTickets() {
   const db = await collection();
-  const data = await db.find({ status: "problem" }).toArray();
+  const data = await db.find({ status: "Problem" }).toArray();
   return { total: data.length, list: data };
 }
 
