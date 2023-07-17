@@ -34,6 +34,7 @@
               <option>Resolved</option>
               <option selected="true">New</option>
               <option>In Process</option>
+              <option>Problem</option>
             </select>
           </div>
         </div>
@@ -80,7 +81,7 @@
 
       <div class="field is-grouped">
         <div class="control">
-          <button class="button is-link">Submit</button>
+          <button class="button is-link" @click="submitTicket()">Submit</button>
         </div>
         <div class="control">
           <button
@@ -102,7 +103,9 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import session from '../stores/session';
+import session, { logout } from '../stores/session';
+import { addTicket } from '../stores/tickets';
+import { reAuthenticate } from '../stores/session';
 
 defineProps({
   isActive: Boolean,
@@ -116,6 +119,35 @@ const description = ref("");
 const priority = ref("Medium");
 const status = ref("New");
 const responsibility = ref("");
+
+function submitTicket() {
+  const ticket = {
+    title: title.value,
+    requestor: requestor.value,
+    priority: priority.value,
+    status: status.value,
+    responsibility: responsibility.value,
+    _id: "",
+    owner_id: session.user?._id || "",
+    timestamp: new Date(),
+    content: {
+      description: description.value,
+      updates: [],}
+  };
+  addTicket(ticket).then(() => {
+    if (session.error && session.error.status === 403) {
+      reAuthenticate().then((result) => {
+        if (result) {
+          submitTicket();
+          closeModal();
+        }
+        else{
+          logout();
+        }
+      });
+    }
+  });
+}
 
 
 function closeModal() {
