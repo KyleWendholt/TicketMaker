@@ -6,7 +6,6 @@ export interface Ticket {
   _id: string;
   title: string;
   owner_id: string;
-  creationTime: Date;
   responsibility: string;
   timestamp: Date;
   status: string;
@@ -34,20 +33,12 @@ export function userTickets(id: string) {
   return api<ListEnvelope<Ticket>>("tickets/" + id);
 }
 
-export function addTicket(title: string, description: string, privacy: boolean, status: string) {
-  const Ticket = {
-    title: title,
-    private: privacy,
-    status: status,
-    content: {
-      description: description,
-    },
-  };
-  return api<Ticket>("tickets", Ticket, "POST");
+export function addTicket(ticket: Ticket) {
+  return api<Ticket["_id"]>("tickets", {ticket}, "POST");
 }
 
-export function updateTicket(id: string, Ticket: Ticket) {
-  return api<Ticket>("tickets/" + id, Ticket, "PATCH");
+export function updateTicket(id: string, update: TicketUpdate) {
+  return api<Ticket>("tickets/" + id, update, "PATCH");
 }
 
 export function deleteTicket(id: string) {
