@@ -12,10 +12,10 @@ const session = reactive({
   token: null as string | null,
 });
 
-export function login(username: string, password: string) {
+export function login(email: string, password: string) {
   api<{ accessToken: string, user: User}>(
     "auth/login",
-    { username, password },
+    { email, password },
     "POST"
   ).then((res) => {
     if (res.accessToken) {
@@ -61,23 +61,21 @@ export async function api<T>(url: string, data: any = null, method?: string) {
   return {} as T;
 }
 
-export function reAuthenticate() {
+export async function reAuthenticate() {
   console.log("reauthenticating");
-  refreshToken().then((res) => {
-    if (res.accessToken) {
-      session.token = res.accessToken;
-      session.user = res.user;
-      console.log("reauthenticated");
-      clearError();
-      return true;
-    } else {
-      console.log("reauthentication failed");
-      //const error = session.error;
-      logout();
-      return false;
-    }
-  });
-  return false;
+  const res = await refreshToken();
+  if (res.accessToken) {
+    session.token = res.accessToken;
+    session.user = res.user;
+    clearError();
+    console.log("reauthenticated");
+    return true;
+  }
+  else {
+    console.log("reauthentication failed");
+    logout();
+    return false;
+  }
 }
 
 export const isLoading = computed(() => !!session.loading);

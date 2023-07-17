@@ -21,10 +21,11 @@ updateTickets();
 function updateTickets() {
   getProblemTickets().then((tickets) => {
     if (session.error && session.error.status === 403) {
-      if (reAuthenticate()) {
-        console.log("reauthenticated");
-        updateTickets();
-      }
+      reAuthenticate().then((result) => {
+        if (result) {
+          updateTickets();
+        }
+      });
     }
     if (tickets.list) {
       problemTickets.splice(0, problemTickets.length, ...tickets.list);
