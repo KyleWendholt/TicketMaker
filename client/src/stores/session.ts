@@ -12,19 +12,21 @@ const session = reactive({
   token: null as string | null,
 });
 
-export function login(email: string, password: string) {
-  api<{ accessToken: string, user: User}>(
+export async function login(email: string, password: string) {
+  const res = await api<{ accessToken: string, user: User}>(
     "auth/login",
     { email, password },
     "POST"
-  ).then((res) => {
-    if (res.accessToken) {
-      session.token = res.accessToken;
-      session.user = res.user;
-      router.push("/");
-    }
-  }
   );
+  if (res.accessToken) {
+    console.log("logged in");
+    session.token = res.accessToken;
+    session.user = res.user;
+    router.push("/");
+  }
+  else {
+    return false;
+  }
 }
 
 export function register(user: User) {

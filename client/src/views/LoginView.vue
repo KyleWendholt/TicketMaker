@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="box" @submit.prevent="login(email,password)">
+    <form class="box" @submit.prevent="attemptLogin()">
       <div class="field">
         <label class="label">Email</label>
         <div class="control">
@@ -12,6 +12,9 @@
         <div class="control">
           <input class="input" type="password" v-model="password" placeholder="Password">
         </div>
+      </div>
+      <div class="field">
+        <p class="help is-danger">{{ errorMessage }}</p>
       </div>
       <div class="field">
         <div class="control">
@@ -26,6 +29,21 @@
 import { ref } from 'vue';
 import { login } from '../stores/session';
 import session from '../stores/session';
+import router from '../router';
+
+const errorMessage = ref("");
+
+if (session.user) {
+    router.push("/");
+}
+
+function attemptLogin() {
+  login(email.value, password.value).then((res) => {
+    if (!res && session.error?.status === 403) {
+      errorMessage.value = "Invalid email or password";
+    }
+  })
+}
 
 const password = ref("");
 const email = ref("");
