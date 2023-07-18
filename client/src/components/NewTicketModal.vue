@@ -123,12 +123,12 @@ const responsibility = ref("");
 function submitTicket() {
   const ticket = {
     title: title.value,
-    requestor: requestor.value,
+    requestorEmail: requestor.value,
     priority: priority.value,
     status: status.value,
     responsibility: responsibility.value,
     _id: "",
-    owner_id: session.user?._id || "",
+    creatorEmail: session.user?.email || "",
     timestamp: new Date(),
     content: {
       description: description.value,
