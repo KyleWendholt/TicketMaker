@@ -146,6 +146,9 @@ function submitTicket() {
         }
       });
     }
+    else {
+      closeModal();
+    }
   });
 }
 
