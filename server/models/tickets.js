@@ -1,3 +1,4 @@
+const { time } = require("console");
 const { connect } = require("./mongo");
 const { ObjectId } = require("mongodb");
 
@@ -8,7 +9,8 @@ async function collection() {
 
 async function getTickets() {
   const db = await collection();
-  const data = await db.find().toArray();
+  let data = await db.find().toArray();
+  data = newToOld(data);
   return { total: data.length, list: data };
 }
 
@@ -27,7 +29,8 @@ async function addTicket(ticket) {
 
 async function getOpenTickets() {
   const db = await collection();
-  const data = await db.find({ status: "Open" }).toArray();
+  let data = await db.find({ status: "Open" }).toArray();
+  data = newToOld(data);
   return { total: data.length, list: data };
 }
 
@@ -39,7 +42,8 @@ async function getProblemTickets() {
 
 async function getTicketsByOwner(owner_id) {
   const db = await collection();
-  const data = await db.find({ owner_id: owner_id }).toArray();
+  let data = await db.find({ owner_id: owner_id }).toArray();
+  data = newToOld(data);
   return { total: data.length, list: data };
 }
 
@@ -53,6 +57,14 @@ async function deleteTicket(id) {
   const db = await collection();
   const result = await db.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount === 1;
+}
+
+function newToOld(data) {
+  data = data.sort((a, b) => {
+    const result = new Date(b.timestamp) - new Date(a.timestamp);
+    return result;
+  });
+  return data;
 }
 
 module.exports = {
