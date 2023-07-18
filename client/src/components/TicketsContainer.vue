@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-heading">
-      <p>{{ title }}</p>
+      <div class="has-text-centered level"><p class="level-item">{{ title }}</p></div>
       <div class="columns column-headers">
         <div class="column">Id</div>
         <div class="column">Title</div>
