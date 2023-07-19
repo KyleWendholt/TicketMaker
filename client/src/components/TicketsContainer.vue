@@ -1,7 +1,12 @@
 <template>
   <div class="panel">
     <div class="panel-heading">
-      <div class="has-text-centered level"><p class="level-item">{{ title }}</p></div>
+      <div class="has-text-centered level">
+        <p class="level-item">{{ title }}</p>
+        <a  @click="$emit('refresh')" class="icon">
+          <font-awesome-icon :icon="['fas', 'arrows-rotate']"
+        /></a>
+      </div>
       <div class="columns column-headers">
         <div class="column">Id</div>
         <div class="column">Title</div>
@@ -11,12 +16,12 @@
         <div class="column">Created</div>
       </div>
     </div>
-      <TicketComponent
-        v-for="ticket in tickets"
-        :ticket="ticket"
-        class="panel-block"
-        :showRequester="showRequester"
-      />
+    <TicketComponent
+      v-for="ticket in tickets"
+      :ticket="ticket"
+      class="panel-block"
+      :showRequester="showRequester"
+    />
   </div>
 </template>
 
@@ -24,17 +29,20 @@
 import TicketComponent from "./Ticket.vue";
 import { Ticket } from "../stores/tickets";
 
+defineEmits(["refresh"]);
 
 defineProps<{
   title: string;
   tickets: Ticket[];
   showRequester?: boolean;
 }>();
-
 </script>
 
 <style scoped>
 .column-headers {
   font-size: medium;
+}
+.icon {
+  color: black;
 }
 </style>

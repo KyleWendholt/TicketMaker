@@ -1,7 +1,7 @@
 <template>
   <div v-if="session.user">
     <div class="columns is-centered">
-      <TicketsContainer :tickets="problemTickets" title="Problems" class="column is-two-thirds" />
+      <TicketsContainer @refresh="updateTickets()" :tickets="problemTickets" title="Problems" class="column is-two-thirds" />
     </div>
   </div>
 </template>
