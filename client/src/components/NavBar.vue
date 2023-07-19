@@ -48,7 +48,7 @@
           class="navbar-item"
           v-if="session.user"
           @click="
-            newTicketsActive = true;          "
+            $emit('new-ticket');          "
         >
           New Ticket
         </a>
@@ -64,18 +64,12 @@
             >
               <strong>Logout</strong>
             </a>
-            <router-link v-else class="button is-primary" to="/login">
-              <strong>Login</strong>
-            </router-link>
           </div>
         </div>
       </div>
     </div>
   </nav>
-  <new-ticket-modal
-  :is-active="newTicketsActive"
-  v-if="session.user"
-  @close="newTicketsActive = false"/>
+  
 </template>
 
 <script setup lang="ts">
@@ -83,12 +77,10 @@ import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import session from "../stores/session";
 import { logout } from "../stores/session";
-import NewTicketModal from "./NewTicketModal.vue";
 
-const newTicketsActive = ref(false);
 const isMenuActive = ref(false);
 
-
+defineEmits(["new-ticket"]);
 </script>
 
 <style scoped>

@@ -10,8 +10,10 @@
             type="text"
             placeholder="Title"
             v-model="title"
+            :class="{ 'is-danger': titleMessage.error }"
           />
         </div>
+        <p class="help is-danger">{{ titleMessage.text }}</p>
       </div>
 
       <div class="field">
@@ -62,7 +64,10 @@
             class="textarea"
             placeholder="Description"
             v-model="description"
+            :class="{ 'is-danger': descriptionMessage.error }"
           ></textarea>
+                  <p class="help is-danger">{{ descriptionMessage.text }}</p>
+
         </div>
       </div>
 
@@ -79,15 +84,15 @@
         </div>
       </div>
 
+      <p class="help" :class="{ 'is-danger': errorMessage.error }">
+        {{ errorMessage.text }}
+      </p>
       <div class="field is-grouped">
         <div class="control">
           <button class="button is-link" @click="submitTicket()">Submit</button>
         </div>
         <div class="control">
-          <button
-            class="button is-link is-light"
-            @click="closeModal()"
-          >
+          <button class="button is-link is-light" @click="closeModal()">
             Cancel
           </button>
         </div>
@@ -102,10 +107,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import session, { logout } from '../stores/session';
-import { addTicket } from '../stores/tickets';
-import { reAuthenticate } from '../stores/session';
+import { reactive, ref } from "vue";
+import session, { logout } from "../stores/session";
+import { addTicket } from "../stores/tickets";
+import { reAuthenticate } from "../stores/session";
 
 defineProps({
   isActive: Boolean,
@@ -120,7 +125,62 @@ const priority = ref("Medium");
 const status = ref("New");
 const responsibility = ref("");
 
+const titleMessage = reactive({
+  error: false,
+  text: "",
+});
+
+const requestorMessage = reactive({
+  error: false,
+  text: "",
+});
+
+const descriptionMessage = reactive({
+  error: false,
+  text: "",
+});
+
+const errorMessage = reactive({
+  error: false,
+  text: "",
+});
+
+function clearErrors() {
+  titleMessage.error = false;
+  titleMessage.text = "";
+  requestorMessage.error = false;
+  requestorMessage.text = "";
+  descriptionMessage.error = false;
+  descriptionMessage.text = "";
+  errorMessage.error = false;
+  errorMessage.text = "";
+}
+
 function submitTicket() {
+  clearErrors();
+  if (title.value === "") {
+    titleMessage.text = "Title is required";
+    titleMessage.error = true;
+    errorMessage.error = true;
+  }
+  if (description.value === "") {
+    descriptionMessage.text = "Description is required";
+    descriptionMessage.error = true;
+    errorMessage.error = true;
+  }
+  if (responsibility.value === "") {
+    responsibility.value = "Unassigned";
+  }
+  if (requestor.value === "") {
+    requestorMessage.text = "Requestor is required";
+    requestorMessage.error = true;
+  }
+
+  if (errorMessage.error) {
+    errorMessage.text = "Form is invalid";
+    return;
+  }
+
   const ticket = {
     title: title.value,
     requestorEmail: requestor.value,
@@ -132,7 +192,8 @@ function submitTicket() {
     timestamp: new Date(),
     content: {
       description: description.value,
-      updates: [],}
+      updates: [],
+    },
   };
   addTicket(ticket).then(() => {
     if (session.error && session.error.status === 403) {
@@ -140,18 +201,15 @@ function submitTicket() {
         if (result) {
           submitTicket();
           closeModal();
-        }
-        else{
+        } else {
           logout();
         }
       });
-    }
-    else {
+    } else {
       closeModal();
     }
   });
 }
-
 
 function closeModal() {
   resetValues();
@@ -166,7 +224,6 @@ function resetValues() {
   status.value = "New";
   responsibility.value = "";
 }
-
 </script>
 
 <style scoped>
@@ -174,4 +231,5 @@ function resetValues() {
   width: 50%;
   background-color: white;
   padding: 2rem;
-}</style>
+}
+</style>
