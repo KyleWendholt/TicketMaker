@@ -7,10 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faTicket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   faEnvelope,
   faTicket,
+  faArrowsRotate,
 );
 
 
