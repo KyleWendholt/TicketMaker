@@ -1,9 +1,13 @@
 <template>
-  <div v-if="session.user">
-    <div class="columns is-centered">
-      <TicketsContainer @refresh="updateTickets()" :tickets="problemTickets" title="Problems" class="column is-two-thirds" />
+  <div class="tile is-ancestor" v-if="session.user">
+    <div class="tile is-parent">
+      <TicketsContainer @refresh="updateProblemTickets()" :tickets="problemTickets" title="Problems" class="tile is-child" />
+    </div>
+    <div class="tile is-parent">
+      <TicketsContainer @refresh="updateResponsibleTickets()" :tickets="responsibleTickets" title="For You" class="tile is-child" />
     </div>
   </div>
+
 </template>
 
 <script setup lang="ts">
@@ -12,8 +16,7 @@ import TicketsContainer from "../components/TicketsContainer.vue";
 import session from "../stores/session";
 import { reAuthenticate } from "../stores/session";
 import router from "../router";
-import { Ticket, getProblemTickets } from "../stores/tickets";
-
+import { Ticket, getProblemTickets, getTicketsByResponsibility } from "../stores/tickets";
 
 if (session.user == null) {
   reAuthenticate().then((result) => {
@@ -24,19 +27,36 @@ if (session.user == null) {
 }
 
 const problemTickets = reactive([] as Ticket[]);
-updateTickets();
+updateProblemTickets();
 
-function updateTickets() {
+const responsibleTickets = reactive([] as Ticket[]);
+updateResponsibleTickets();
+
+function updateProblemTickets() {
   getProblemTickets().then((tickets) => {
     if (session.error && session.error.status === 403) {
       reAuthenticate().then((result) => {
         if (result) {
-          updateTickets();
+          updateProblemTickets();
         }
       });
     }
     if (tickets.list) {
       problemTickets.splice(0, problemTickets.length, ...tickets.list);
+    }
+  });
+}
+function updateResponsibleTickets() {
+  getTicketsByResponsibility().then((tickets) => {
+    if (session.error && session.error.status === 403) {
+      reAuthenticate().then((result) => {
+        if (result) {
+          updateResponsibleTickets();
+        }
+      });
+    }
+    if (tickets.list) {
+      responsibleTickets.splice(0, problemTickets.length, ...tickets.list);
     }
   });
 }
@@ -48,5 +68,8 @@ function updateTickets() {
 }
 .column {
   margin: 0px;
+}
+.is-parent{
+  height: fit-content;
 }
 </style>
