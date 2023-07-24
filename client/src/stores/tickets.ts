@@ -30,6 +30,10 @@ export function getProblemTickets() {
   return api<ListEnvelope<Ticket>>("tickets/problems");
 }
 
+export function getTicketsByResponsibility() {
+  return api<ListEnvelope<Ticket>>("tickets/responsibility", null, "GET");
+}
+
 export function userTickets(id: string) {
   return api<ListEnvelope<Ticket>>("tickets/" + id);
 }
