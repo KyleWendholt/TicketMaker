@@ -10,6 +10,12 @@ app
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
+  .get("/responsibility", authToken, (req, res, next) => {
+    tickets
+      .getTicketsByResponsibility(req.user.roles)
+      .then((x) => res.status(200).send(x))
+      .catch(next);
+  })
   .get("/open", authToken, (req, res, next) => {
     tickets
       .getOpenTickets()

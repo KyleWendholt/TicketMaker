@@ -20,6 +20,13 @@ async function getTicket(id) {
   return data;
 }
 
+async function getTicketsByResponsibility(roles) {
+  const db = await collection();
+  let data = await db.find({ responsibility: { $in: roles } }).toArray();
+  data = newToOld(data);
+  return { total: data.length, list: data };
+}
+
 async function addTicket(ticket) {
   ticket._id = new ObjectId();
   const db = await collection();
@@ -76,4 +83,5 @@ module.exports = {
   getTicketsByOwner,
   getOpenTickets,
   getProblemTickets,
+  getTicketsByResponsibility,
 };
