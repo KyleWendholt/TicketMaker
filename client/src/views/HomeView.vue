@@ -1,22 +1,37 @@
 <template>
   <div class="tile is-ancestor" v-if="session.user">
     <div class="tile is-parent">
-      <TicketsContainer @refresh="updateProblemTickets()" :tickets="problemTickets" title="Problems" class="tile is-child" />
+      <TicketsContainer
+        @refresh="updateProblemTickets()"
+        :size-of-tabs="1"
+        :ticket-envelope="problemTickets"
+        title="Problems"
+        class="tile is-child"
+      />
     </div>
     <div class="tile is-parent">
-      <TicketsContainer @refresh="updateResponsibleTickets()" :tickets="responsibleTickets" title="For You" class="tile is-child" />
+      <TicketsContainer
+        @refresh="updateResponsibleTickets()"
+        :size-of-tabs="1"
+        :ticket-envelope="responsibleTickets"
+        title="For You"
+        class="tile is-child"
+      />
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import TicketsContainer from "../components/TicketsContainer.vue";
-import session from "../stores/session";
+import session, { ListEnvelope } from "../stores/session";
 import { reAuthenticate } from "../stores/session";
 import router from "../router";
-import { Ticket, getProblemTickets, getTicketsByResponsibility } from "../stores/tickets";
+import {
+  Ticket,
+  getProblemTickets,
+  getTicketsByResponsibility,
+} from "../stores/tickets";
 
 if (session.user == null) {
   reAuthenticate().then((result) => {
@@ -26,10 +41,16 @@ if (session.user == null) {
   });
 }
 
-const problemTickets = reactive([] as Ticket[]);
+const problemTickets = ref<ListEnvelope<Ticket>>({
+  list: [],
+  total: 0,
+});
 updateProblemTickets();
 
-const responsibleTickets = reactive([] as Ticket[]);
+const responsibleTickets = ref<ListEnvelope<Ticket>>({
+  list: [],
+  total: 0,
+});
 updateResponsibleTickets();
 
 function updateProblemTickets() {
@@ -42,7 +63,7 @@ function updateProblemTickets() {
       });
     }
     if (tickets.list) {
-      problemTickets.splice(0, problemTickets.length, ...tickets.list);
+      problemTickets.value = tickets;
     }
   });
 }
@@ -56,7 +77,7 @@ function updateResponsibleTickets() {
       });
     }
     if (tickets.list) {
-      responsibleTickets.splice(0, problemTickets.length, ...tickets.list);
+      responsibleTickets.value = tickets;
     }
   });
 }
@@ -69,7 +90,7 @@ function updateResponsibleTickets() {
 .column {
   margin: 0px;
 }
-.is-parent{
+.is-parent {
   height: fit-content;
 }
 </style>

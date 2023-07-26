@@ -1,7 +1,12 @@
 <template>
   <div v-if="session.user">
     <div class="columns is-centered">
-      <TicketsContainer :tickets="allTickets" title="All Tickets" class="column is-two-thirds" />
+      <TicketsContainer
+        :size-of-tabs="50"
+        :ticket-envelope="allTicketsEnvelope"
+        title="All Tickets"
+        class="column is-two-thirds"
+      />
     </div>
   </div>
 </template>
@@ -9,35 +14,37 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import TicketsContainer from "../components/TicketsContainer.vue";
-import session from "../stores/session";
+import session, { ListEnvelope, logout } from "../stores/session";
 import { reAuthenticate } from "../stores/session";
 import router from "../router";
 import { Ticket, getTickets } from "../stores/tickets";
 
 
-if (session.user == null) {
-  reAuthenticate().then((result) => {
-    if (!result) {
-      router.push("/login");
-    }
-  });
-}
 
-const allTickets = reactive([] as Ticket[]);
+const allTicketsEnvelope = ref<ListEnvelope<Ticket>>({
+  list: [],
+  total: 0,
+});
 updateTickets();
 
 function updateTickets() {
   getTickets().then((tickets) => {
+    console.log("ticfsad;ljsadkjlkets");
+    console.log(tickets);
     if (session.error && session.error.status === 403) {
       reAuthenticate().then((result) => {
         if (result) {
           updateTickets();
         }
+        else {
+          logout();
+          router.push("/login");
+        }
       });
     }
     if (tickets.list) {
-      allTickets.splice(0, allTickets.length, ...tickets.list);
-    }
+      allTicketsEnvelope.value = tickets;
+        }
   });
 }
 </script>
