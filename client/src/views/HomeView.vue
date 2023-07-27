@@ -1,7 +1,7 @@
 <template>
   <div v-if="session.user">
     <div class="columns is-centered">
-      <TicketsContainer :tickets="problemTickets" title="Problems" class="column is-two-thirds" />
+      <TicketsContainer :tickets="problemTickets" :size-of-tabs="5" title="Problems" class="column is-two-thirds" />
     </div>
   </div>
 </template>
@@ -26,16 +26,10 @@ if (session.user == null) {
   });
 }
 
-const problemTickets = ref<ListEnvelope<Ticket>>({
-  list: [],
-  total: 0,
-});
+const problemTickets = reactive<Ticket[]>([]);
 updateProblemTickets();
 
-const responsibleTickets = ref<ListEnvelope<Ticket>>({
-  list: [],
-  total: 0,
-});
+const responsibleTickets = reactive<Ticket[]>([]);
 updateResponsibleTickets();
 
 function updateProblemTickets() {
@@ -48,7 +42,7 @@ function updateProblemTickets() {
       });
     }
     if (tickets.list) {
-      problemTickets.value = tickets;
+      problemTickets.splice(0, problemTickets.length, ...tickets.list);
     }
   });
 }
@@ -62,8 +56,8 @@ function updateResponsibleTickets() {
       });
     }
     if (tickets.list) {
-      responsibleTickets.value = tickets;
-    }
+
+      responsibleTickets.splice(0, responsibleTickets.length, ...tickets.list);    }
   });
 }
 </script>

@@ -34,7 +34,7 @@ import { ListEnvelope } from "../stores/session";
 
 const props = defineProps<{
   title: string;
-  ticketEnvelope: ListEnvelope<Ticket>;
+  tickets: Ticket[];
   showRequester?: boolean;
   sizeOfTabs: number;
 }>();

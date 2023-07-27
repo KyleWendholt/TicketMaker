@@ -3,7 +3,7 @@
     <div class="columns is-centered">
       <TicketsContainer
         :size-of-tabs="50"
-        :ticket-envelope="allTicketsEnvelope"
+        :tickets="allTicketsEnvelope.list"
         title="All Tickets"
         class="column is-two-thirds"
       />
