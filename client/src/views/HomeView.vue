@@ -1,22 +1,7 @@
 <template>
-  <div class="tile is-ancestor" v-if="session.user">
-    <div class="tile is-parent">
-      <TicketsContainer
-        @refresh="updateProblemTickets()"
-        :size-of-tabs="1"
-        :ticket-envelope="problemTickets"
-        title="Problems"
-        class="tile is-child"
-      />
-    </div>
-    <div class="tile is-parent">
-      <TicketsContainer
-        @refresh="updateResponsibleTickets()"
-        :size-of-tabs="1"
-        :ticket-envelope="responsibleTickets"
-        title="For You"
-        class="tile is-child"
-      />
+  <div v-if="session.user">
+    <div class="columns is-centered">
+      <TicketsContainer :tickets="problemTickets" title="Problems" class="column is-two-thirds" />
     </div>
   </div>
 </template>
