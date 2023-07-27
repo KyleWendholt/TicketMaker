@@ -21,11 +21,7 @@
       "request": "launch",
       "name": "vuejs: chrome",
       "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}/src",
-      "breakOnLoad": true,
-      "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+      "webRoot": "${workspaceFolder}",
     },
     {
       "type": "firefox",
@@ -33,7 +29,6 @@
       "name": "vuejs: firefox",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/src",
-      "pathMappings": [{ "url": "webpack:///src/", "path": "${webRoot}/" }]
     }
   ]
 }
