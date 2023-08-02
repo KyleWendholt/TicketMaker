@@ -16,12 +16,12 @@
         <div class="column">Created</div>
       </div>
     </div>
-      <TicketComponent
-        v-for="ticket in tickets"
-        :ticket="ticket"
-        class="panel-block"
-        :showRequester="showRequester"
-      />
+    <TicketComponent
+      v-for="ticket in ticketsEnvelope.list"
+      :ticket="ticket"
+      class="panel-block"
+      :showRequester="showRequester"
+    />
   </div>
 </template>
 
@@ -31,14 +31,12 @@ import { Ticket } from "../stores/tickets";
 import { defineProps, defineEmits, ref, reactive } from "vue";
 import { ListEnvelope } from "../stores/session";
 
-
 const props = defineProps<{
   title: string;
-  tickets: Ticket[];
+  ticketsEnvelope: ListEnvelope<Ticket>;
   showRequester?: boolean;
   sizeOfTabs: number;
 }>();
-
 </script>
 
 <style scoped>

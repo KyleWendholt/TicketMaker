@@ -1,7 +1,20 @@
 <template>
-  <div v-if="session.user">
-    <div class="columns is-centered">
-      <TicketsContainer :tickets="problemTickets" :size-of-tabs="5" title="Problems" class="column is-two-thirds" />
+  <div class="tile is-ancestor" v-if="session.user">
+    <div class="tile is-parent">
+      <TicketsContainer
+        :tickets-envelope="problemTickets"
+        :size-of-tabs="5"
+        title="Problems"
+        class="tile is-child"
+      />
+    </div>
+    <div class="tile is-parent">
+      <TicketsContainer
+        :tickets-envelope="responsibleTickets"
+        :size-of-tabs="5"
+        title="Responsible"
+        class="tile is-child"
+      />
     </div>
   </div>
 </template>
@@ -18,19 +31,23 @@ import {
   getTicketsByResponsibility,
 } from "../stores/tickets";
 
-if (session.user == null) {
-  reAuthenticate().then((result) => {
-    if (!result) {
-      router.push("/login");
-    }
-  });
-}
 
-const problemTickets = reactive<Ticket[]>([]);
+const problemTickets = ref<ListEnvelope<Ticket>>({
+  list: [],
+  total: 0,
+});
 updateProblemTickets();
 
-const responsibleTickets = reactive<Ticket[]>([]);
+const responsibleTickets = ref<ListEnvelope<Ticket>>({
+  list: [],
+  total: 0,
+});
 updateResponsibleTickets();
+
+function updateTickets(){
+  updateProblemTickets();
+  updateResponsibleTickets();
+}
 
 function updateProblemTickets() {
   getProblemTickets().then((tickets) => {
@@ -42,7 +59,7 @@ function updateProblemTickets() {
       });
     }
     if (tickets.list) {
-      problemTickets.splice(0, problemTickets.length, ...tickets.list);
+      problemTickets.value = tickets;
     }
   });
 }
@@ -56,8 +73,8 @@ function updateResponsibleTickets() {
       });
     }
     if (tickets.list) {
-
-      responsibleTickets.splice(0, responsibleTickets.length, ...tickets.list);    }
+      responsibleTickets.value = tickets;
+    }
   });
 }
 </script>

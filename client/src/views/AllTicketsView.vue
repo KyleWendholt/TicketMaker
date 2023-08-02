@@ -1,11 +1,11 @@
 <template>
-  <div v-if="session.user">
-    <div class="columns is-centered">
+  <div class="tile is-ancestor" v-if="session.user">
+    <div class="tile is-parent">
       <TicketsContainer
         :size-of-tabs="50"
-        :tickets="allTicketsEnvelope.list"
+        :tickets-envelope="allTicketsEnvelope"
         title="All Tickets"
-        class="column is-two-thirds"
+        class="tile is-child"
       />
     </div>
   </div>
@@ -20,7 +20,6 @@ import router from "../router";
 import { Ticket, getTickets } from "../stores/tickets";
 
 
-
 const allTicketsEnvelope = ref<ListEnvelope<Ticket>>({
   list: [],
   total: 0,
@@ -29,14 +28,12 @@ updateTickets();
 
 function updateTickets() {
   getTickets().then((tickets) => {
-    console.log("ticfsad;ljsadkjlkets");
     console.log(tickets);
     if (session.error && session.error.status === 403) {
       reAuthenticate().then((result) => {
         if (result) {
           updateTickets();
-        }
-        else {
+        } else {
           logout();
           router.push("/login");
         }
@@ -44,7 +41,7 @@ function updateTickets() {
     }
     if (tickets.list) {
       allTicketsEnvelope.value = tickets;
-        }
+    }
   });
 }
 </script>
