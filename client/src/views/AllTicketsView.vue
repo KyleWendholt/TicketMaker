@@ -24,25 +24,33 @@ const allTicketsEnvelope = ref<ListEnvelope<Ticket>>({
   list: [],
   total: 0,
 });
-updateTickets();
 
-function updateTickets() {
-  getTickets().then((tickets) => {
-    console.log(tickets);
-    if (session.error && session.error.status === 403) {
-      reAuthenticate().then((result) => {
-        if (result) {
-          updateTickets();
-        } else {
-          logout();
-          router.push("/login");
-        }
-      });
-    }
-    if (tickets.list) {
-      allTicketsEnvelope.value = tickets;
+if (!session.user) {
+  reAuthenticate().then((result) => {
+    if (result) {
+      loadPage();
     }
   });
+} else {
+  loadPage();
+}
+
+async function loadPage() {
+  await updateTickets();
+  if (session.error && session.error.status === 403) {
+    reAuthenticate().then((result) => {
+      if (result) {
+        loadPage();
+      }
+    });
+  }
+}
+
+async function updateTickets() {
+  const result = await getTickets();
+  if (result.list) {
+    allTicketsEnvelope.value = result;
+  }
 }
 </script>
 

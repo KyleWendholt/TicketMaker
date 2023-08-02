@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import TicketsContainer from "../components/TicketsContainer.vue";
-import session, { ListEnvelope } from "../stores/session";
+import session, { ListEnvelope, logout } from "../stores/session";
 import { reAuthenticate } from "../stores/session";
 import router from "../router";
 import {
@@ -31,51 +31,44 @@ import {
   getTicketsByResponsibility,
 } from "../stores/tickets";
 
-
 const problemTickets = ref<ListEnvelope<Ticket>>({
   list: [],
   total: 0,
 });
-updateProblemTickets();
 
 const responsibleTickets = ref<ListEnvelope<Ticket>>({
   list: [],
   total: 0,
 });
-updateResponsibleTickets();
 
-function updateTickets(){
-  updateProblemTickets();
-  updateResponsibleTickets();
-}
-
-function updateProblemTickets() {
-  getProblemTickets().then((tickets) => {
-    if (session.error && session.error.status === 403) {
-      reAuthenticate().then((result) => {
-        if (result) {
-          updateProblemTickets();
-        }
-      });
-    }
-    if (tickets.list) {
-      problemTickets.value = tickets;
+if (!session.user) {
+  reAuthenticate().then((result) => {
+    if (result) {
+      loadPage();
     }
   });
+} else {
+  loadPage();
 }
-function updateResponsibleTickets() {
-  getTicketsByResponsibility().then((tickets) => {
-    if (session.error && session.error.status === 403) {
-      reAuthenticate().then((result) => {
-        if (result) {
-          updateResponsibleTickets();
-        }
-      });
-    }
-    if (tickets.list) {
-      responsibleTickets.value = tickets;
-    }
-  });
+async function loadPage() {
+  await updateProblemTickets();
+  await updateResponsibleTickets();
+  if (session.error && session.error.status === 403) {
+    reAuthenticate().then((result) => {
+      if (result) {
+        loadPage();
+      }
+    });
+  }
+}
+
+async function updateProblemTickets() {
+  const result = await getProblemTickets();
+  if (result.list) problemTickets.value = result;
+}
+async function updateResponsibleTickets() {
+  const result = await getTicketsByResponsibility();
+  if (result.list) responsibleTickets.value = result;
 }
 </script>
 
