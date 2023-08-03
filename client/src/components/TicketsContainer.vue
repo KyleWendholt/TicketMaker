@@ -16,12 +16,18 @@
         <div class="column">Created</div>
       </div>
     </div>
+    <p class="panel-tabs" v-if="sizeOfTabs<ticketsEnvelope.total">
+      <a v-for="n in getNumTabs(sizeOfTabs, ticketsEnvelope.total)" :class="{ 'is-active': currentTab===n}" @click="currentTab = n;" >
+        {{n}}
+      </a>
+    </p>
     <TicketComponent
-      v-for="ticket in ticketsEnvelope.list"
+      v-for="ticket in getVisTickets(ticketsEnvelope.list, sizeOfTabs, currentTab)"
       :ticket="ticket"
       class="panel-block"
       :showRequester="showRequester"
     />
+
   </div>
 </template>
 
@@ -37,6 +43,18 @@ const props = defineProps<{
   showRequester?: boolean;
   sizeOfTabs: number;
 }>();
+
+function getNumTabs(tabsize: number, total: number) {
+  return Math.ceil(total / tabsize);
+}
+
+const currentTab = ref(1);
+
+
+function getVisTickets(ticketList: Ticket[], tabsize: number, currentTab: number) {
+  return ticketList.slice((currentTab - 1) * tabsize, currentTab * tabsize) ;
+}
+
 </script>
 
 <style scoped>

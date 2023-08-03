@@ -2,7 +2,7 @@
   <div class="tile is-ancestor" v-if="session.user">
     <div class="tile is-parent">
       <TicketsContainer
-        :size-of-tabs="50"
+        :size-of-tabs="25"
         :tickets-envelope="allTicketsEnvelope"
         title="All Tickets"
         class="tile is-child"
