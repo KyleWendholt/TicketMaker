@@ -1,15 +1,19 @@
 @import "bulma/bulma.sass";
 
-.solarized-theme {
+.solarized {
   @import "themes/solarized.scss";
-  background-color: black;
 }
 
-.nord-theme {
+.nord {
   @import "themes/nord.scss";
-  background-color: blue;
 }
 
+html {
+  height: 100%;
+}
+body{
+  height: 100%;
+}
 
 div {
   //for debugging

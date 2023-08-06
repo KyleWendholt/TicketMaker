@@ -5,10 +5,7 @@
     aria-label="main navigation"
   >
     <div class="navbar-brand">
-      <a
-        class="navbar-item"
-        href="https://github.com/KyleWendholt/TicketMaker"
-      >
+      <a class="navbar-item" href="https://github.com/KyleWendholt/TicketMaker">
         <font-awesome-icon icon="ticket" />
       </a>
 
@@ -55,17 +52,33 @@
       </div>
 
       <div class="navbar-end">
-        <div class="navbar-item has-dropdown" :class="{'is-active': themeDropdown}">
-          <a class="navbar-link" @click="themeDropdown = !themeDropdown">Current theme: {{ session.theme }}</a>
+        <!-- 
+          for themeing, not currently working on
+          <div
+          class="navbar-item has-dropdown"
+          :class="{ 'is-active': themeDropdown }"
+        >
+          <a class="navbar-link" @click="themeDropdown = !themeDropdown"
+            >Current theme: {{ session.theme }}</a
+          >
           <div class="navbar-dropdown">
-            <a class="navbar-item" v-for="theme in session.themes">  </a>
-            
+            <a
+              class="navbar-item"
+              :class="{ 'is-active': theme === session.theme }"
+              @click="
+                setTheme(theme);
+                themeDropdown = !themeDropdown;
+              "
+              v-for="theme in session.themes"
+            >
+              {{ theme }}
+            </a>
           </div>
-        </div>
+        </div> -->
 
         <div class="navbar-item">
           <div class="buttons">
-            <button v-if="session.user" class="button" @click="logout()">
+            <button v-if="session.user" class="button is-danger" @click="logout()">
               <strong>Logout</strong>
             </button>
           </div>
@@ -78,6 +91,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import { setTheme } from "../stores/session";
 import session from "../stores/session";
 import { logout } from "../stores/session";
 
@@ -88,7 +102,7 @@ defineEmits(["new-ticket"]);
 </script>
 
 <style scoped>
-a{
+a {
   user-select: none;
 }
 </style>
