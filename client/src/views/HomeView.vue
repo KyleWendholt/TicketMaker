@@ -3,17 +3,19 @@
     <div class="tile is-parent">
       <TicketsContainer
         :tickets-envelope="problemTickets"
-        :size-of-tabs="5"
+        :tickets-per-tab="5"
         title="Problems"
         class="tile is-child"
+        :show-responsibility="true"
       />
     </div>
     <div class="tile is-parent">
       <TicketsContainer
         :tickets-envelope="responsibleTickets"
-        :size-of-tabs="5"
+        :tickets-per-tab="5"
         title="Responsible"
         class="tile is-child"
+        :show-requester="true"
       />
     </div>
   </div>
