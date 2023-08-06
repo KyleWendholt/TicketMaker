@@ -10,7 +10,7 @@ const session = reactive({
   error: null as { message: string; status?: number } | null,
   messages: [] as Message[],
   token: null as string | null,
-  theme: "light" as string,
+  theme: localStorage.getItem('theme') as string,
   themes: ["light", "dark",'solarized','nord'] as string[],
 });
 
@@ -29,6 +29,13 @@ export async function login(email: string, password: string) {
   else {
     return false;
   }
+}
+
+export const REFRESH_INTERVAL = 1000 * 60 * 1.5; // 1.5 minutes
+
+export function setTheme(theme: string) {
+  session.theme = theme;
+  localStorage.setItem("theme", theme);
 }
 
 export function register(user: User) {

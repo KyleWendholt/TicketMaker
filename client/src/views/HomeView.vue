@@ -25,7 +25,7 @@
 import { reactive, ref } from "vue";
 import TicketsContainer from "../components/TicketsContainer.vue";
 import session, { ListEnvelope, logout } from "../stores/session";
-import { reAuthenticate } from "../stores/session";
+import { reAuthenticate, REFRESH_INTERVAL } from "../stores/session";
 import router from "../router";
 import {
   Ticket,
@@ -46,19 +46,23 @@ const responsibleTickets = ref<ListEnvelope<Ticket>>({
 if (!session.user) {
   reAuthenticate().then((result) => {
     if (result) {
-      loadPage();
+      updatePage();
     }
   });
 } else {
-  loadPage();
+  updatePage();
 }
-async function loadPage() {
+async function updatePage() {
+  setInterval(() => {
+    updatePage();
+    console.log("refreshing");
+  }, REFRESH_INTERVAL);
   await updateProblemTickets();
   await updateResponsibleTickets();
   if (session.error && session.error.status === 403) {
     reAuthenticate().then((result) => {
       if (result) {
-        loadPage();
+        updatePage();
       }
     });
   }
@@ -75,12 +79,6 @@ async function updateResponsibleTickets() {
 </script>
 
 <style scoped>
-.columns {
-  margin: 0px;
-}
-.column {
-  margin: 0px;
-}
 .is-parent {
   height: fit-content;
 }
