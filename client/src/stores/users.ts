@@ -10,8 +10,6 @@ export interface User {
   profilePicture: string;
 }
 
-
-
 export function autocompleteUsers(query: string) {
   return api<ListEnvelope<User>>("users/autocomplete/" + query);
 }

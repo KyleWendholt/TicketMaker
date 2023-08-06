@@ -10,6 +10,8 @@ const session = reactive({
   error: null as { message: string; status?: number } | null,
   messages: [] as Message[],
   token: null as string | null,
+  theme: "light" as string,
+  themes: ["light", "dark",'solarized','nord'] as string[],
 });
 
 export async function login(email: string, password: string) {

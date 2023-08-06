@@ -9,7 +9,7 @@ const newTicketsActive = ref(false);
 
 </script>
 
-<template>
+<template :class="{theme: session.theme}">
   <header><NavBar @new-ticket="newTicketsActive = true"/></header>
 
   <RouterView />

@@ -1,13 +1,16 @@
 <template>
   <nav
-    class="navbar is-fixed-top secondary-color"
+    class="navbar is-fixed-top"
     role="navigation"
     aria-label="main navigation"
   >
     <div class="navbar-brand">
-      <span class="navbar-item" href="">
+      <a
+        class="navbar-item"
+        href="https://github.com/KyleWendholt/TicketMaker"
+      >
         <font-awesome-icon icon="ticket" />
-      </span>
+      </a>
 
       <a
         :class="{ 'is-active': isMenuActive }"
@@ -32,7 +35,9 @@
       <div class="navbar-start">
         <router-link to="/" class="navbar-item"> Home </router-link>
 
-        <router-link class="navbar-item" to="/tickets"> All Tickets </router-link>
+        <router-link class="navbar-item" to="/tickets">
+          All Tickets
+        </router-link>
 
         <router-link class="navbar-item" to="/profile"> Profile </router-link>
 
@@ -44,32 +49,30 @@
           Admin
         </router-link>
 
-        <a
-          class="navbar-item"
-          v-if="session.user"
-          @click="
-            $emit('new-ticket');          "
-        >
+        <a class="navbar-item" v-if="session.user" @click="$emit('new-ticket')">
           New Ticket
         </a>
       </div>
 
       <div class="navbar-end">
+        <div class="navbar-item has-dropdown" :class="{'is-active': themeDropdown}">
+          <a class="navbar-link" @click="themeDropdown = !themeDropdown">Current theme: {{ session.theme }}</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" v-for="theme in session.themes">  </a>
+            
+          </div>
+        </div>
+
         <div class="navbar-item">
           <div class="buttons">
-            <a
-              v-if="session.user"
-              class="button is-primary"
-              @click="logout()"
-            >
+            <button v-if="session.user" class="button" @click="logout()">
               <strong>Logout</strong>
-            </a>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </nav>
-  
 </template>
 
 <script setup lang="ts">
@@ -79,10 +82,13 @@ import session from "../stores/session";
 import { logout } from "../stores/session";
 
 const isMenuActive = ref(false);
+const themeDropdown = ref(false);
 
 defineEmits(["new-ticket"]);
 </script>
 
 <style scoped>
-
+a{
+  user-select: none;
+}
 </style>
