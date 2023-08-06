@@ -2,10 +2,12 @@
   <div class="tile is-ancestor" v-if="session.user">
     <div class="tile is-parent">
       <TicketsContainer
-        :size-of-tabs="25"
+        :tickets-per-tab="25"
         :tickets-envelope="allTicketsEnvelope"
         title="All Tickets"
         class="tile is-child"
+        :show-requester="true"
+        :show-responsibility="true"
       />
     </div>
   </div>
@@ -18,7 +20,6 @@ import session, { ListEnvelope, logout } from "../stores/session";
 import { reAuthenticate } from "../stores/session";
 import router from "../router";
 import { Ticket, getTickets } from "../stores/tickets";
-
 
 const allTicketsEnvelope = ref<ListEnvelope<Ticket>>({
   list: [],
