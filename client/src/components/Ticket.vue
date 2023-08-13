@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column" @click="openTicket(ticket._id)">
       <a>{{ ticket.title }}</a></div>
-    <div class="column is-2">{{ ticket.status }}</div>
+    <div v-if="showStatus" class="column is-2">{{ ticket.status }}</div>
     <div v-if="showRequester" class="column">{{ ticket.requestorEmail }}</div>
     <div v-if="showResponsibility" class="column">{{ ticket.responsibility }}</div>
     <div class="column is-2">{{ getDate(ticket.timestamp) }}</div>
@@ -28,6 +28,7 @@ defineProps<{
   ticket: Ticket;
   showRequester?: boolean;
   showResponsibility?: boolean;
+  showStatus?: boolean;
 }>();
 
 function openTicket(id: string) {

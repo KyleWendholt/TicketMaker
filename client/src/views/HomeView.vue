@@ -6,7 +6,8 @@
         :tickets-per-tab="5"
         title="Problems"
         class="tile is-child"
-        :show-responsibility="true"
+        :show-requester="false"
+        :show-status="false"
       />
     </div>
     <div class="tile is-parent">
@@ -15,7 +16,7 @@
         :tickets-per-tab="5"
         title="Responsible"
         class="tile is-child"
-        :show-requester="true"
+        :show-responsibility="false"
       />
     </div>
   </div>
