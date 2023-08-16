@@ -1,18 +1,21 @@
-@import 'bulma/bulma.sass';
-// .primary-color{
-//   background-color: #3b4252;
-//   color: black;
-//   a{
-//     color: black;
-//   }
-// }
-// .secondary-color{
-//   background-color: #4c566a;
-//   color: black;
-//   a{
-//     color: black;
-//   }
-// }
+@import "bulma/bulma.sass";
+
+.solarized {
+  @import "themes/solarized.scss";
+}
+
+.nord {
+  @import "themes/nord.scss";
+}
+
+html {
+  height: 100%;
+}
+body{
+  height: 100%;
+}
+
 div {
+  //for debugging
   //border: 1px solid black;
 }

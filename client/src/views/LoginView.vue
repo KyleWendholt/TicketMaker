@@ -18,7 +18,7 @@
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-link">Login</button>
+          <button class="button is-link" :class="{'is-loading': session.loading}">Login</button>
         </div>
       </div>
     </form>

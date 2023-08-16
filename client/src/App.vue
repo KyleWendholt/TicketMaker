@@ -6,20 +6,20 @@ import session from "./stores/session";
 import { ref } from "vue";
 
 const newTicketsActive = ref(false);
-
 </script>
 
 <template>
-  <header><NavBar @new-ticket="newTicketsActive = true"/></header>
+  <div :class="session.theme">
+    <header><NavBar @new-ticket="newTicketsActive = true" /></header>
 
-  <RouterView />
+    <RouterView class="body"/>
 
-  <new-ticket-modal
-  :is-active="newTicketsActive"
-  v-if="session.user"
-  @close="newTicketsActive = false"/>
+    <new-ticket-modal
+      :is-active="newTicketsActive"
+      v-if="session.user"
+      @close="newTicketsActive = false"
+    />
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

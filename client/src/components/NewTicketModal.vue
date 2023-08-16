@@ -89,7 +89,7 @@
       </p>
       <div class="field is-grouped">
         <div class="control">
-          <button class="button is-link" @click="submitTicket()">Submit</button>
+          <button class="button is-link" :class="{'is-loading': session.loading}" @click="submitTicket()">Submit</button>
         </div>
         <div class="control">
           <button class="button is-link is-light" @click="closeModal()">
