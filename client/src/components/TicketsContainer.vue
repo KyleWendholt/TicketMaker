@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import TicketComponent from "./Ticket.vue";
+import TicketComponent from "./TicketInfo.vue";
 import { Ticket } from "../stores/tickets";
 import { defineProps, defineEmits, ref, reactive } from "vue";
 import { ListEnvelope } from "../stores/session";
