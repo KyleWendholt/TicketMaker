@@ -5,20 +5,19 @@ import NewTicketModal from "./components/NewTicketModal.vue";
 import session from "./stores/session";
 import { ref } from "vue";
 
+const hasNav = ref(true);
 const newTicketsActive = ref(false);
 </script>
 
 <template>
   <div :class="session.theme">
-    <header><NavBar @new-ticket="newTicketsActive = true" /></header>
+    <header>
+      <NavBar v-if="hasNav" @new-ticket="newTicketsActive = true" />
+    </header>
+    
+    <router-view @hideNav="hasNav = false" />
 
-    <RouterView class="body"/>
-
-    <new-ticket-modal
-      :is-active="newTicketsActive"
-      v-if="session.user"
-      @close="newTicketsActive = false"
-    />
+    <new-ticket-modal :is-active="newTicketsActive" v-if="session.user" @close="newTicketsActive = false" />
   </div>
 </template>
 
