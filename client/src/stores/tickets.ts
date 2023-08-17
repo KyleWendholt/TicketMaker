@@ -49,3 +49,11 @@ export function updateTicket(id: string, update: TicketUpdate) {
 export function deleteTicket(id: string) {
   return api<boolean>("tickets/" + id, null, "DELETE");
 }
+
+export function getTicket(id: string) {
+  return api<Ticket>("tickets/" + id);
+}
+
+export function openTicketWin(id: string) {
+  window.open("/tickets/" + id, `Ticket ${id}`, "popup");
+}
