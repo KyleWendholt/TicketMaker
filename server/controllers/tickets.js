@@ -34,12 +34,7 @@ app
       .then((x) => res.status(200).send(x))
       .catch(next);
   })
-  .get("/:id", (req, res, next) => {
-    const auth = authToken(req.header.Authorization);
-    if (auth === "string") {
-      res.status(401).send();
-      return;
-    }
+  .get("/:id",authToken, (req, res, next) => {
     tickets
       .getTicket(req.params.id)
       .then((x) => res.status(200).send(x))
@@ -59,12 +54,7 @@ app
       })
       .catch(next);
   })
-  .post("/update/:id", (req, res, next) => {
-    const auth = authToken(req.header.Authorization);
-    if (auth === "string") {
-      res.status(401).send();
-      return;
-    }
+  .post("/update/:id",authToken, (req, res, next) => {
     tickets
       .updateTicket(req.body._id, req.body.updates)
       .then((result) => {
