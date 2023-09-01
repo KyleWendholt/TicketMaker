@@ -55,7 +55,6 @@ async function updateTicket() {
   const result = await getTicket(props.id);
   if (result) ticket.value = result;
 }
-
 </script>
 
 <style scoped>
