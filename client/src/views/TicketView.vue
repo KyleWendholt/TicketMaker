@@ -6,6 +6,7 @@
     <h2>time</h2>
     <h2>status</h2>
     <h2>content</h2>
+    <h2>{{ticket}}</h2>
   </div>
   <div v-else-if="session.loading">
     <h1 class="title">Loading...</h1>
