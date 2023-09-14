@@ -1,22 +1,20 @@
 <template>
-    <div v-if="ticket">
-        <h1 class="title">{{ ticket.title }}</h1>
-        <h2 class="subtitle">{{ ticket.requestorEmail }}</h2>
-        <h2 class="subtitle">responsible</h2>
-        <h2>time</h2>
-        <h2>status</h2>
-        <h2>content</h2>
-    </div>
-    <div v-else-if="session.loading">
-        <h1 class="title">Loading...</h1>
-    </div>
-    <div v-else>
-        <h1 class="title">Ticket id:{{ id }} not found</h1>
-        {{ session.error }}{{ ticket }}
-    </div>
-
-    <div>
-    </div>
+  <div v-if="ticket">
+    <h1 class="title">{{ ticket.title  }}</h1>
+    <h2 class="subtitle">{{ ticket.requestorEmail }}</h2>
+    <h2 class="subtitle">responsible</h2>
+    <h2>time</h2>
+    <h2>status</h2>
+    <h2>content</h2>
+    <h2>{{ticket}}</h2>
+  </div>
+  <div v-else-if="session.loading">
+    <h1 class="title">Loading...</h1>
+  </div>
+  <div v-else>
+    <h1 class="title">Ticket id:{{ id }} not found</h1>
+    {{ session.error }}{{ ticket }}
+  </div>
 </template>
 
 <script setup lang="ts">
